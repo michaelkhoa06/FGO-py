@@ -398,6 +398,14 @@ class StunnedCardTests(FixtureObserverCase):
         ready = self.observe("story/two-servants-stunned.png")
         self.assertTrue(next(c for c in ready.cards if c["slot"] == 6)["ready"])
 
+    def test_an_immobilized_np_is_unusable(self):
+        """Live 2026-09-27 (Oberon): Tezcatlipoca's NP showed "Immobilized"."""
+        state = self.observe("story/np-immobilized.png")
+        nps = {c["slot"]: c for c in state.cards if c["slot"] >= 6}
+        self.assertIsNot(True, nps[7]["ready"])
+        self.assertTrue(nps[6]["ready"])
+        self.assertTrue(nps[8]["ready"])
+
     def test_stunned_cards_fill_only_a_short_hand(self):
         from fgo_agent.card_rules import selectable_slots
         hand = [{"slot": s, "type": "arts", "sealed": True, "stunned": True} for s in (1, 2, 3)]

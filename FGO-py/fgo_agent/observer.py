@@ -43,19 +43,25 @@ def _stunned(image, region) -> bool:
 # live frame, 2026-09-27: sealed cards scored >= 0.76, 268 other card screens
 # (ready, stunned and absent NPs) <= 0.39. The seal was applied by the enemy's
 # attack, after the ally's Status tab had been read, so only the card showed it.
-_NP_SEALED_TEMPLATE = Path(__file__).parent / "assets" / "cards" / "np_sealed.png"
+# Same place, NA "Immobilized" (sleep; Zzz icon), cut live 2026-09-27 (Oberon):
+# Tezcatlipoca's NP was tapped, nothing happened, and the plan repeated the chain.
+# Immobilized cards scored >= 0.82 (one transition frame 0.67), others <= 0.33.
+_NP_LABEL_TEMPLATES = [Path(__file__).parent / "assets" / "cards" / name
+                       for name in ("np_sealed.png", "np_immobilized.png")]
 _NP_SEALED_MATCH = 0.6
-_NP_SEALED_TEMPLATE_IMAGE = None
+_NP_LABEL_IMAGES = None
 
 
 def _np_sealed_label(image, index: int) -> bool:
+    """An NP card carrying a label that makes it unusable ("NP Sealed", "Immobilized")."""
     import cv2
-    global _NP_SEALED_TEMPLATE_IMAGE
-    if _NP_SEALED_TEMPLATE_IMAGE is None:
-        _NP_SEALED_TEMPLATE_IMAGE = cv2.imread(str(_NP_SEALED_TEMPLATE), cv2.IMREAD_GRAYSCALE)
+    global _NP_LABEL_IMAGES
+    if _NP_LABEL_IMAGES is None:
+        _NP_LABEL_IMAGES = [cv2.imread(str(path), cv2.IMREAD_GRAYSCALE) for path in _NP_LABEL_TEMPLATES]
     x = 431 + 220*index
     region = cv2.cvtColor(image[172:245, x-130:x+140], cv2.COLOR_BGR2GRAY)
-    return float(cv2.matchTemplate(region, _NP_SEALED_TEMPLATE_IMAGE, cv2.TM_CCOEFF_NORMED).max()) >= _NP_SEALED_MATCH
+    return any(float(cv2.matchTemplate(region, template, cv2.TM_CCOEFF_NORMED).max()) >= _NP_SEALED_MATCH
+               for template in _NP_LABEL_IMAGES)
 
 
 # A multi-bar enemy shows one diamond per HP bar under its name, left of the HP

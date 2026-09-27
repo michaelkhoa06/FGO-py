@@ -121,6 +121,7 @@ class PlannerPolicy:
         # HP at the last tactical frame of the current turn, and the losses over
         # the last enemy turn (see _track_incoming).
         self._hp_turn, self._hp_last, self._incoming = None, {}, None
+        self._refused_nps: dict[tuple, set[int]] = {}
         self._pending_hit: dict | None = None
         try:
             self._class_relation = load_class_relation()
@@ -321,7 +322,12 @@ class PlannerPolicy:
             exact = [i for i in ranked if nps(i) == wanted]
             if not exact:
                 self._flag_deviation(obs, f"planned NP slots {sorted(entry['np'])} on turn {obs.turn} are not all ready")
-                exact = [i for i in ranked if nps(i) <= wanted]
+                # Seen live 2026-09-27 (Oberon): one of three planned NPs was
+                # Immobilized and the top-ranked subset was face cards only, so the
+                # two ready NPs waited a turn. Fire every planned NP still legal.
+                available = wanted & {slot for i in legal for slot in nps(i)}
+                exact = ([i for i in ranked if nps(i) == available]
+                         or [i for i in ranked if nps(i) <= wanted])
             if not exact:
                 return None
             choice = exact[0]
@@ -1260,6 +1266,19 @@ class PlannerPolicy:
         if result.status != "confirmed":
             # An unconfirmed action invalidates the rest of a batched plan.
             self._plan_queue, self._plan_key = [], None
+        obs = self._last_obs
+        if (action.kind == "cards" and result.status == "rejected" and obs is not None
+                and type(obs.turn) is int):
+            # Seen live 2026-09-27 (Oberon): an Immobilized servant's NP read ready,
+            # the game ignored its tap, and the plan picked the same three NPs until
+            # the retry limit. The NPs in a chain the game refused are not offered
+            # again this turn (face cards cannot be refused once legality holds).
+            suspects = {slot for slot in action.cards if slot >= 6}
+            self._refused_nps.setdefault((obs.wave, obs.turn), set()).update(suspects)
+            self._history.append({"event": "card_chain_not_taken", "cards": list(action.cards),
+                                  "wave": obs.wave, "turn": obs.turn,
+                                  "note": "the game did not attack; those NP cards are withheld this turn"})
+            del self._history[:-self._MAX_HISTORY]
         if action.kind == "enemy_target" and action.target is not None:
             key = self._pending_enemy_targets.pop(action.target, None)
             if key is not None and result.status == "confirmed":
@@ -1391,6 +1410,8 @@ class PlannerPolicy:
             valid = selectable_slots(obs.cards, obs.signals, obs.turn)
             size = chain_length(obs.cards, obs.signals, obs.turn)
             fillers = filler_slots(obs.cards, obs.signals, obs.turn)
+            refused = self._refused_nps.get((obs.wave, obs.turn), set())
+            valid = [slot for slot in valid if slot not in refused]
             real = min(size, len([slot for slot in valid if slot not in fillers]))
             for triple in permutations(valid, size) if size else ():
                 # Fillers (sealed or stunned cards) only make up the count, after

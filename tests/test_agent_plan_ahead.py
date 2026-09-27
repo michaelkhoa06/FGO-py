@@ -923,3 +923,38 @@ class LethalDamageTests(unittest.TestCase):
     def test_survivable_losses_are_not_flagged(self):
         policy, obs = self.setup(hp=9000, lost=6000)
         self.assertIsNone(policy._lethal_issue({2: {"wave": 1, "skills": [], "np": [1]}}, obs))
+
+
+class RefusedChainTests(unittest.TestCase):
+    """Live 2026-09-27 (Oberon): the same refused NP chain was picked until the retry limit."""
+
+    def test_nps_of_a_refused_chain_are_withheld_this_turn(self):
+        from fgo_agent.models import Action, ActionResult
+        hand = [{"slot": s, "type": "arts", "sealed": False} for s in range(1, 6)]
+        hand += [{"slot": s, "type": "np", "sealed": False, "ready": True} for s in (6, 7, 8)]
+        obs = Observation("c", "cards", "now", wave=1, turn=18, cards=hand)
+        policy = PlannerPolicy(DATA, Backend(PLAN))
+        policy._last_obs = obs
+        chain = Action("cards", cards=(6, 7, 8))
+        policy.observe_result(chain, ActionResult(chain, "rejected", "c", "c", reason="the game did not attack"))
+        chains = [a.cards for a in policy._allowed_actions(obs).values() if a.kind == "cards"]
+        self.assertTrue(chains)
+        self.assertFalse(any(slot >= 6 for chain in chains for slot in chain))
+        later = Observation("c2", "cards", "now", wave=1, turn=19, cards=hand)
+        self.assertTrue(any(8 in a.cards for a in policy._allowed_actions(later).values() if a.kind == "cards"))
+
+
+class PartialPlannedNpTests(unittest.TestCase):
+    """Live 2026-09-27 (Oberon): one planned NP was Immobilized and the executor
+    played face cards only, holding the two ready NPs for a turn."""
+
+    def test_the_planned_nps_still_ready_fire(self):
+        policy = PlannerPolicy(DATA, Backend(PLAN), plan_ahead=True)
+        policy._battle_plan = {"turns": {1: {"wave": 1, "skills": [], "np": [1, 2, 3], "focus": None}}}
+        hand = [{"slot": s, "type": "buster", "sealed": False, "servant": 1} for s in range(1, 6)]
+        hand += [{"slot": 6, "type": "np", "sealed": False, "ready": True, "servant": 1},
+                 {"slot": 7, "type": "np", "sealed": None, "ready": False, "servant": 2},
+                 {"slot": 8, "type": "np", "sealed": False, "ready": True, "servant": 3}]
+        obs = Observation("c", "cards", "now", wave=1, turn=1, cards=hand)
+        action = policy._from_battle_plan(obs, {}, policy._allowed_actions(obs))
+        self.assertEqual({6, 8}, {slot for slot in action.cards if slot >= 6})

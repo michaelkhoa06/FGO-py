@@ -1069,6 +1069,46 @@ transition into target selection, and the tap cancelled it (skill unused, 2-min
 wait). Skill taps now wait until the target is sent or two animation frames in a
 row (`test_a_single_transition_frame_after_a_skill_tap_gets_no_speed_tap`).
 
+### FGA overlay button over slot 1 (found 2026-09-27)
+The FGA floating button sat bottom-left (~(40, 687)) in today's runs and covered
+slot 1's class icon. `getFieldServantClassRank(0)` returned None, so the servant in
+slot 1 was unidentified: the support Castoria (Lv120, "Altria Avalon") in every
+Cernunnos run and the Oberon fight. Her skills were never offered and her kit never
+reached Codex (cards and NP still played). Verified: the same frame with the button
+painted out identifies her as 284. Zhuge Liang still matched in slot 1. This was also
+the root of the "unknown slot" back-line bug. The user moved the button to the top
+right (~(1240, 35)), clear of everything the agent reads or taps. Open idea: when a
+slot's class icon is unreadable, match its portrait against all classes.
+Oberon fight 20260927T210403Z-33589f58: the run stopped on turn 13 with "FGO NA must
+be in the foreground" while the user moved the button (the frame still showed the
+battle); no input was sent, and it was resumed. Speed taps: 6-36 per card turn
+(every 2 s through the whole enemy phase); harmless so far.
+Correction: the game had crashed (ADB "error: closed" on the next launch); the
+user reopened it and FGO restored turn 13 from its start (boss 63,471). Resumed
+run 20260927T213529Z-cde56012: DEFEAT on turn 14. Tezcatlipoca alone, skills on
+cooldown (next on turn 16), 76% NP; the boss fired its NP at full charge with ~42k
+left on its last bar. Party read: Altria Avalon (support, Lv120), Mash, Draco; subs
+Oberon, Arjuna Alter, Tezcatlipoca. Order Change on turn 2 swapped Mash for
+Tezcatlipoca, citing `enemy_pressure` ("Mash lost 8,309 HP last enemy turn").
+Leyline continuation 20260927T214035Z-9054de6c: FGA button removed, slot 1 now
+identified (Castoria 284) and her skills used from turn 15. Bar 3 broke on turn 15
+(Castoria's NP then Draco's); last bar 404,312. On turn 18 Tezcatlipoca was
+Immobilized (sleep; label on his NP card), his NP read ready, [6, 7, 8] was
+picked, the game ignored his tap, and the new stuck-card recovery tapped Back, but
+the plan re-ran the same chain until the 3 continuations were spent.
+Fixes: (1) `assets/cards/np_immobilized.png` joins the NP label check (sealed
+>= 0.82 incl. a Castoria sleep earlier; others <= 0.33; threshold 0.6); test
+`test_an_immobilized_np_is_unusable` (fixture np-immobilized.png). (2) After a
+refused card chain, its NP cards are withheld for the rest of that turn and the
+history says so (`RefusedChainTests`).
+Resumed 20260927T220150Z-c8ca0d00: VICTORY on turn 20 (Oberon fight total: 20
+turns, one crash, two Leyline Stones). Immobilized read correctly (slot 2 NP
+sealed, 6 and 8 ready), but the plan executor, with NP [1, 2, 3] planned and 7
+unusable, took the top-ranked subset: face cards only; Castoria's and Oberon's
+NPs fired a turn late. Fix: when not every planned NP is legal, the executor
+fires every planned NP that still is (`PartialPlannedNpTests`). Turn 19 fired all
+three NPs (205k -> 61k) and Arjuna Alter's buffed cards finished it on turn 20.
+
 ## Next session intent (user, end of 2026-09-24)
 
 Continue the Avalon le Fae story. The next few fights are heavily scripted and
