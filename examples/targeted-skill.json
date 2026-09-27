@@ -1,0 +1,9 @@
+[
+  {
+    "kind": "skill",
+    "servant": 2,
+    "skill": 1,
+    "target": 3,
+    "reason": "Bounded target-dialog test: manually selected ally in field slot 3. Check your actual team before use."
+  }
+]

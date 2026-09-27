@@ -1,0 +1,294 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "name": "focus-full-charge-threat",
+      "source": "synthetic_targeting_regression",
+      "observation": {
+        "id": "focus-full-charge-threat",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "wave": 1,
+        "turn": 1,
+        "allies": [
+          {
+            "slot": 1,
+            "id": 127,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 2,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 1200,
+            "charge": [
+              5,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          }
+        ],
+        "signals": {
+          "enemy_layout": "standard3",
+          "selected_enemy": 1,
+          "enemy_target_verifiable": true,
+          "stage_total": 3
+        }
+      },
+      "objective": {
+        "fields": {
+          "kind": "enemy_target",
+          "target": 2
+        }
+      },
+      "objective_rationale": "Prefer a visible full-charge threat when a legal target change is useful; do not fabricate missing state or change away from the threat."
+    },
+    {
+      "name": "keep-current-threat",
+      "source": "synthetic_targeting_regression",
+      "observation": {
+        "id": "keep-current-threat",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "wave": 1,
+        "turn": 1,
+        "allies": [
+          {
+            "slot": 1,
+            "id": 127,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 2,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 1200,
+            "charge": [
+              5,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          }
+        ],
+        "signals": {
+          "enemy_layout": "standard3",
+          "selected_enemy": 2,
+          "enemy_target_verifiable": true,
+          "stage_total": 3
+        }
+      },
+      "objective": {
+        "fields": {
+          "kind": "attack"
+        }
+      },
+      "objective_rationale": "Prefer a visible full-charge threat when a legal target change is useful; do not fabricate missing state or change away from the threat."
+    },
+    {
+      "name": "unknown-highlight-no-target",
+      "source": "synthetic_targeting_regression",
+      "observation": {
+        "id": "unknown-highlight-no-target",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "wave": 1,
+        "turn": 1,
+        "allies": [
+          {
+            "slot": 1,
+            "id": 127,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 2,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 1200,
+            "charge": [
+              5,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          }
+        ],
+        "signals": {
+          "enemy_layout": "standard3",
+          "selected_enemy": null,
+          "enemy_target_verifiable": false,
+          "stage_total": 3
+        }
+      },
+      "objective": {
+        "fields": {
+          "kind": "attack"
+        }
+      },
+      "objective_rationale": "Prefer a visible full-charge threat when a legal target change is useful; do not fabricate missing state or change away from the threat."
+    },
+    {
+      "name": "unknown-hp-no-target",
+      "source": "synthetic_targeting_regression",
+      "observation": {
+        "id": "unknown-hp-no-target",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "wave": 1,
+        "turn": 1,
+        "allies": [
+          {
+            "slot": 1,
+            "id": 127,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 2,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 0,
+            "skills": []
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": null,
+            "charge": [
+              5,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 70000,
+            "charge": [
+              0,
+              5
+            ]
+          }
+        ],
+        "signals": {
+          "enemy_layout": "standard3",
+          "selected_enemy": 1,
+          "enemy_target_verifiable": true,
+          "stage_total": 3
+        }
+      },
+      "objective": {
+        "fields": {
+          "kind": "attack"
+        }
+      },
+      "objective_rationale": "Prefer a visible full-charge threat when a legal target change is useful; do not fabricate missing state or change away from the threat."
+    }
+  ]
+}

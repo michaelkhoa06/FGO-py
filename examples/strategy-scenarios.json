@@ -1,0 +1,1477 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "name": "conserve-on-weak-opening",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "attack"
+        }
+      },
+      "objective_rationale": "Very low-HP enemies and healthy party: avoid spending skills before normal attacks.",
+      "observation": {
+        "id": "conserve-on-weak-opening",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 314,
+            "hp": 12000,
+            "np": 13,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 3,
+                "ready": true,
+                "cooldown": null
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 3,
+                "ready": true,
+                "cooldown": null
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 75,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 3,
+                "ready": true,
+                "cooldown": null
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 1300,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 1300,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 1300,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "charge-near-ready-damage-dealer",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "skill",
+          "servant": 1,
+          "skill": 1,
+          "target": 3
+        }
+      },
+      "objective_rationale": "Target the near-ready area damage NP rather than the lowest-NP support; exact charge magnitude remains unknown.",
+      "observation": {
+        "id": "charge-near-ready-damage-dealer",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 314,
+            "hp": 12000,
+            "np": 13,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 37,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 75,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "merlin-defense-before-enemy-np",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "skill",
+          "servant": 1,
+          "skill": 2
+        }
+      },
+      "objective_rationale": "Available party invincibility is useful before full enemy charge.",
+      "observation": {
+        "id": "merlin-defense-before-enemy-np",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 150,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 2,
+            "hp": 3000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 65,
+            "hp": 4000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 160000,
+            "charge": [
+              5,
+              5
+            ]
+          }
+        ],
+        "cards": [],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "unknown-party-state-does-not-invent-skill-input",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "attack"
+        }
+      },
+      "objective_rationale": "Only Attack is legal; unknown state must not manufacture targets or a skill.",
+      "observation": {
+        "id": "unknown-party-state-does-not-invent-skill-input",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": null,
+            "hp": null,
+            "np": null,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 3,
+                "ready": true,
+                "cooldown": null
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 284,
+            "hp": null,
+            "np": null,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 3,
+                "ready": true,
+                "cooldown": null
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 215,
+            "hp": 12000,
+            "np": null,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": null,
+            "charge": [
+              null,
+              null
+            ]
+          }
+        ],
+        "cards": [],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "save-skadi-charge-at-full-np",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "attack"
+        }
+      },
+      "objective_rationale": "All known NP gauges are already full; avoid spending a targeted charge skill for no observed need.",
+      "observation": {
+        "id": "save-skadi-charge-at-full-np",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 215,
+            "hp": 12000,
+            "np": 100,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": true,
+                "cooldown": null
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 65,
+            "hp": 12000,
+            "np": 100,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 2,
+            "hp": 12000,
+            "np": 100,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "mash-defend-low-party",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "skill",
+          "servant": 1,
+          "skill": 1
+        }
+      },
+      "objective_rationale": "Party defense is available before an enemy with full charge; exact upgrade remains unknown.",
+      "observation": {
+        "id": "mash-defend-low-party",
+        "phase": "tactical",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 1,
+            "hp": 2500,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": true,
+                "cooldown": null
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 284,
+            "hp": 2400,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 2,
+            "hp": 2700,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 120000,
+            "charge": [
+              5,
+              5
+            ]
+          }
+        ],
+        "cards": [],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "area-np-on-large-wave",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "cards"
+        },
+        "cards_include": [
+          8
+        ]
+      },
+      "objective_rationale": "A ready area NP addresses several high-HP enemies.",
+      "observation": {
+        "id": "area-np-on-large-wave",
+        "phase": "cards",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 37,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 284,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 100,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 90000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [
+          {
+            "slot": 1,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 2,
+            "type": "arts",
+            "servant": 1,
+            "visualgroupid": 1,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 3,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 4,
+            "type": "quick",
+            "servant": 2,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 5,
+            "type": "arts",
+            "servant": 2,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 8,
+            "type": "np",
+            "servant": 3,
+            "sealed": false,
+            "ready": true
+          }
+        ],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "save-np-on-weak-nonfinal-wave",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "cards"
+        },
+        "cards_exclude": [
+          8
+        ]
+      },
+      "objective_rationale": "Healthy party and weak early wave: conserve a ready NP for later waves.",
+      "observation": {
+        "id": "save-np-on-weak-nonfinal-wave",
+        "phase": "cards",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 37,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 284,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 247,
+            "hp": 12000,
+            "np": 100,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 1000,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 2,
+            "hp": 1000,
+            "charge": [
+              1,
+              5
+            ]
+          },
+          {
+            "slot": 3,
+            "hp": 1000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [
+          {
+            "slot": 1,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 2,
+            "type": "arts",
+            "servant": 1,
+            "visualgroupid": 1,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 3,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 4,
+            "type": "quick",
+            "servant": 2,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 5,
+            "type": "arts",
+            "servant": 2,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 8,
+            "type": "np",
+            "servant": 3,
+            "sealed": false,
+            "ready": true
+          }
+        ],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "sealed-np-is-never-selected",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "cards"
+        },
+        "cards_exclude": [
+          8
+        ]
+      },
+      "objective_rationale": "Seal evidence overrides readiness.",
+      "observation": {
+        "id": "sealed-np-is-never-selected",
+        "phase": "cards",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 150,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 215,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 2,
+            "hp": 12000,
+            "np": 100,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 180000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [
+          {
+            "slot": 1,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 2,
+            "type": "arts",
+            "servant": 1,
+            "visualgroupid": 1,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 3,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 4,
+            "type": "quick",
+            "servant": 2,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 5,
+            "type": "arts",
+            "servant": 2,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 8,
+            "type": "np",
+            "servant": 3,
+            "sealed": true,
+            "ready": true
+          }
+        ],
+        "wave": 3,
+        "turn": 3,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "unknown-ownership-retains-visual-cards",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "cards"
+        },
+        "cards_exclude": [
+          4
+        ]
+      },
+      "objective_rationale": "Use visible unsealed cards without inventing field ownership for duplicate servants.",
+      "observation": {
+        "id": "unknown-ownership-retains-visual-cards",
+        "phase": "cards",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 314,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 65,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 15000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [
+          {
+            "slot": 1,
+            "type": "buster",
+            "servant": null,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 2,
+            "type": "arts",
+            "servant": null,
+            "visualgroupid": 1,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 3,
+            "type": "buster",
+            "servant": null,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 4,
+            "type": "quick",
+            "servant": null,
+            "visualgroupid": 2,
+            "sealed": true,
+            "affinity": "neutral",
+            "critical_rate": 0
+          },
+          {
+            "slot": 5,
+            "type": "arts",
+            "servant": null,
+            "visualgroupid": 2,
+            "sealed": false,
+            "affinity": "neutral",
+            "critical_rate": 0
+          }
+        ],
+        "wave": 1,
+        "turn": 1,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    },
+    {
+      "name": "enemy-weak-means-favorable-affinity",
+      "source": "synthetic_with_cached_NA_servant_descriptions",
+      "objective": {
+        "fields": {
+          "kind": "cards"
+        },
+        "cards_include": [
+          1,
+          2,
+          3
+        ]
+      },
+      "objective_rationale": "Regression from live explanations: three otherwise comparable weak-affinity Buster cards are advantageous, while resist is unfavorable.",
+      "observation": {
+        "id": "enemy-weak-means-favorable-affinity",
+        "phase": "cards",
+        "captured_at": "synthetic",
+        "allies": [
+          {
+            "slot": 1,
+            "id": 150,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 2,
+            "id": 37,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          },
+          {
+            "slot": 3,
+            "id": 2,
+            "hp": 12000,
+            "np": 0,
+            "skills": [
+              {
+                "slot": 1,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 2,
+                "ready": false,
+                "cooldown": 5
+              },
+              {
+                "slot": 3,
+                "ready": false,
+                "cooldown": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [
+          {
+            "slot": 1,
+            "hp": 150000,
+            "charge": [
+              1,
+              5
+            ]
+          }
+        ],
+        "cards": [
+          {
+            "slot": 1,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "weak",
+            "critical_rate": 0
+          },
+          {
+            "slot": 2,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "weak",
+            "critical_rate": 0
+          },
+          {
+            "slot": 3,
+            "type": "buster",
+            "servant": 3,
+            "visualgroupid": 3,
+            "sealed": false,
+            "affinity": "weak",
+            "critical_rate": 0
+          },
+          {
+            "slot": 4,
+            "type": "buster",
+            "servant": 1,
+            "visualgroupid": 1,
+            "sealed": false,
+            "affinity": "resist",
+            "critical_rate": 0
+          },
+          {
+            "slot": 5,
+            "type": "buster",
+            "servant": 1,
+            "visualgroupid": 1,
+            "sealed": false,
+            "affinity": "resist",
+            "critical_rate": 0
+          }
+        ],
+        "wave": 3,
+        "turn": 3,
+        "signals": {
+          "stage_total": 3,
+          "stage_turn": 1
+        }
+      }
+    }
+  ]
+}

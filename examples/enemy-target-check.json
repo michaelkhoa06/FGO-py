@@ -1,0 +1,3 @@
+[
+  {"kind": "enemy_target", "target": 1, "reason": "Verify a single enemy target change against two observed selected-HUD highlights."}
+]

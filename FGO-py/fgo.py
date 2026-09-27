@@ -11,9 +11,11 @@ parser.add_argument('-l','--loglevel',help='Change the console log level (defaul
 parser.add_argument('-c','--config',help='Config file path (default: %(default)s)',type=str,default='fgoConfig.json')
 parser.add_argument('-r','--readonly',help='Do not save configuration file on exit',action='store_false')
 parser.add_argument('--no-color',help='Disable colored console output',action='store_true')
+parser.add_argument('--language',help='GUI language (default: English)',choices=['en','ja','zh','system'],default='en')
 arg=parser.parse_args()
 
 if arg.no_color:os.environ['NO_COLOR']='1'
+os.environ['FGO_UI_LANGUAGE']=arg.language
 
 match arg.entrypoint:
     case'gui':from fgoGui import main

@@ -22,3 +22,4 @@ Log*.txt
 fgoConfig.json
 launch*
 halt*
+agent-runs/

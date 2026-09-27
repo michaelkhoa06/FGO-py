@@ -1,0 +1,1273 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "name": "np-farm-durable-first-wave-needs-setup",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "fields": {
+     "kind": "skill"
+    }
+   },
+   "objective_rationale": "Three 30,000 HP enemies will not fall to face cards, so the turn must begin by charging or buffing the area NP rather than advancing straight to cards.",
+   "observation": {
+    "id": "np-farm-durable-first-wave-needs-setup",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 316,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 1,
+    "turn": 1,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-trivial-wave-still-spends-nothing",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "fields": {
+     "kind": "attack"
+    }
+   },
+   "objective_rationale": "The same party against 1,372 HP trash must NOT spend the farming setup; face cards clear it, so the cheapest correct plan is to advance to the card phase.",
+   "observation": {
+    "id": "np-farm-trivial-wave-still-spends-nothing",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 316,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 1372,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 1372,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 1372,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 1,
+    "turn": 1,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-final-wave-amplifier-before-np",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "any_of": [
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 2,
+       "skill": 3,
+       "target": 3
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 1,
+       "skill": 3,
+       "target": 3
+      }
+     }
+    ]
+   },
+   "objective_rationale": "The dealer is already at 100% NP on the heaviest wave, so the remaining value is a one-turn damage amplifier aimed at it: Oberon S3 NP Strength or Koyanskaya S3 Buster effectiveness. Charging further is wasted and attacking unbuffed is weaker.",
+   "observation": {
+    "id": "np-farm-final-wave-amplifier-before-np",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 20,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 316,
+      "hp": 12000,
+      "np": 20,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 100,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 45000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 45000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 45000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 3,
+    "turn": 3,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-wave-survived-so-stop-repeating",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "fields": {
+     "kind": "skill"
+    }
+   },
+   "objective_rationale": "stage_turn 2 is observed proof a plain card turn did not clear this wave. Repeating attack is the mistake; the held buffs and charges should now be spent.",
+   "observation": {
+    "id": "np-farm-wave-survived-so-stop-repeating",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 316,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 18000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 18000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 0,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 2,
+    "turn": 3,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 2,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-buff-follows-attack-power-not-slot-order",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "any_of": [
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 2,
+       "skill": 1,
+       "target": 1
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 2,
+       "skill": 3,
+       "target": 1
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 3,
+       "skill": 1,
+       "target": 1
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 3,
+       "skill": 2,
+       "target": 1
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 3,
+       "skill": 3,
+       "target": 1
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 1,
+       "skill": 1,
+       "target": 1
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 1,
+       "skill": 2,
+       "target": 1
+      }
+     }
+    ]
+   },
+   "objective_rationale": "Arjuna Alter is in slot 1 and has the highest class-adjusted attack (11,669 x 1.1 = 12,836) versus Koyanskaya of Light in slot 2 (11,616 x 0.9 = 10,454). Selectable charges and Buster buffs belong on slot 1. Raw attack alone would not separate them.",
+   "observation": {
+    "id": "np-farm-buff-follows-attack-power-not-slot-order",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 316,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 1,
+    "turn": 1,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-double-battery-opens-on-the-dealer",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "any_of": [
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 1,
+       "target": 3
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 2,
+       "target": 3
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 3,
+       "target": 3
+      }
+     }
+    ]
+   },
+   "objective_rationale": "Two Koyanskaya batteries and Arjuna Alter at 75% against three 30,000 HP enemies. Every worthwhile opening action is a charge or Buster buff aimed at slot 3, the only area-NP damage dealer and the highest class-adjusted attack on the field.",
+   "observation": {
+    "id": "np-farm-double-battery-opens-on-the-dealer",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 75,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 30000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 1,
+    "turn": 1,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-second-wave-uses-the-untouched-battery",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "any_of": [
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 2,
+       "skill": 1,
+       "target": 3
+      }
+     },
+     {
+      "fields": {
+       "kind": "skill",
+       "servant": 2,
+       "skill": 3,
+       "target": 3
+      }
+     }
+    ]
+   },
+   "objective_rationale": "The dealer spent his NP on wave 1 and sits at 0%, and the slot 1 battery is on cooldown. The slot 2 Koyanskaya is untouched, so her charge is what can produce a second wave-clearing NP. Its cooldown reduction also lands on the dealer.",
+   "observation": {
+    "id": "np-farm-second-wave-uses-the-untouched-battery",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 20,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 314,
+      "hp": 12000,
+      "np": 20,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 28000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 28000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 28000,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 2,
+    "turn": 2,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  },
+  {
+   "name": "np-farm-final-wave-brings-in-the-back-line",
+   "source": "synthetic_with_cached_NA_servant_descriptions",
+   "objective": {
+    "plan_includes_any": [
+     "oc-f1-b1",
+     "oc-f2-b1"
+    ]
+   },
+   "objective_rationale": "Both Koyanskaya batteries are spent and the dealer is at 0% facing a 137,991 HP final wave, as measured live. The back-line Oberon supplies charge and a one-turn NP amplifier, so the turn must swap a spent Koyanskaya (never the dealer in slot 3) for him. Spending the last useful skill of the outgoing servant before the swap is fine.",
+   "observation": {
+    "id": "np-farm-final-wave-brings-in-the-back-line",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 137991,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 0,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 0,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 3,
+    "turn": 3,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1,
+     "order_change_available": true,
+     "backline": [
+      {
+       "slot": 1,
+       "name": "Oberon",
+       "servant_id": 316
+      },
+      {
+       "slot": 2,
+       "name": "Nitocris (Alter)",
+       "servant_id": 370
+      },
+      {
+       "slot": 3,
+       "name": "Space Ereshkigal",
+       "servant_id": null
+      }
+     ]
+    }
+   }
+  },
+  {
+   "name": "np-farm-hold-turn-limited-skills-when-np-is-unreachable",
+   "source": "synthetic_from_live_run_20260922T232303Z",
+   "objective": {
+    "plan_excludes_all": [
+     "s1-2-t3",
+     "s1-3-t3"
+    ]
+   },
+   "objective_rationale": "Live, spending Oberon S2 (charge that decreases at end of turn) and S3 (one-turn amplifier ending in buff removal and Eternal Slumber) on the 0% dealer left him at 70%, then 64% and debuffed; wave 3 took three turns. Neither may be spent on the dealer on a turn his NP cannot fire.",
+   "observation": {
+    "id": "np-farm-hold-turn-limited-skills-when-np-is-unreachable",
+    "phase": "tactical",
+    "captured_at": "synthetic",
+    "allies": [
+     {
+      "slot": 1,
+      "id": 316,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 2,
+        "ready": true,
+        "cooldown": null
+       },
+       {
+        "slot": 3,
+        "ready": true,
+        "cooldown": null
+       }
+      ]
+     },
+     {
+      "slot": 2,
+      "id": 314,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     },
+     {
+      "slot": 3,
+      "id": 247,
+      "hp": 12000,
+      "np": 0,
+      "skills": [
+       {
+        "slot": 1,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 2,
+        "ready": false,
+        "cooldown": 5
+       },
+       {
+        "slot": 3,
+        "ready": false,
+        "cooldown": 5
+       }
+      ]
+     }
+    ],
+    "enemies": [
+     {
+      "slot": 1,
+      "hp": 135175,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 2,
+      "hp": 0,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     },
+     {
+      "slot": 3,
+      "hp": 0,
+      "charge": [
+       0,
+       5
+      ],
+      "priority_label": null
+     }
+    ],
+    "cards": [],
+    "wave": 3,
+    "turn": 3,
+    "target_count": null,
+    "errors": [],
+    "signals": {
+     "stage_total": 3,
+     "stage_turn": 1,
+     "enemy_layout": "standard3",
+     "enemy_target_verifiable": true,
+     "selected_enemy": 1
+    }
+   }
+  }
+ ]
+}

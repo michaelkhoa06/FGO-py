@@ -1,0 +1,1677 @@
+{
+ "version": 1,
+ "region": "NA",
+ "source_url": "https://api.atlasacademy.io/export/NA/basic_servant.json",
+ "source_sha256": "57e18cd8b0740da26463b3df4e60e1a2119586c86b74cb7a1dc33fc57e55e27d",
+ "fetched_at": "2026-09-22T22:54:17.527057+00:00",
+ "servants": {
+  "1": {
+   "name": "Mash Kyrielight",
+   "class_name": "shielder"
+  },
+  "2": {
+   "name": "Altria Pendragon",
+   "class_name": "saber"
+  },
+  "3": {
+   "name": "Altria Pendragon (Alter)",
+   "class_name": "saber"
+  },
+  "4": {
+   "name": "Altria Pendragon (Lily)",
+   "class_name": "saber"
+  },
+  "5": {
+   "name": "Nero Claudius",
+   "class_name": "saber"
+  },
+  "6": {
+   "name": "Siegfried",
+   "class_name": "saber"
+  },
+  "7": {
+   "name": "Gaius Julius Caesar",
+   "class_name": "saber"
+  },
+  "8": {
+   "name": "Altera",
+   "class_name": "saber"
+  },
+  "9": {
+   "name": "Gilles de Rais",
+   "class_name": "saber"
+  },
+  "10": {
+   "name": "Chevalier d'Eon",
+   "class_name": "saber"
+  },
+  "11": {
+   "name": "Emiya",
+   "class_name": "archer"
+  },
+  "12": {
+   "name": "Gilgamesh",
+   "class_name": "archer"
+  },
+  "13": {
+   "name": "Robin Hood",
+   "class_name": "archer"
+  },
+  "14": {
+   "name": "Atalante",
+   "class_name": "archer"
+  },
+  "15": {
+   "name": "Euryale",
+   "class_name": "archer"
+  },
+  "16": {
+   "name": "Arash",
+   "class_name": "archer"
+  },
+  "17": {
+   "name": "Cú Chulainn",
+   "class_name": "lancer"
+  },
+  "18": {
+   "name": "Elisabeth Báthory",
+   "class_name": "lancer"
+  },
+  "19": {
+   "name": "Musashibou Benkei",
+   "class_name": "lancer"
+  },
+  "20": {
+   "name": "Cú Chulainn (Prototype)",
+   "class_name": "lancer"
+  },
+  "21": {
+   "name": "Leonidas I",
+   "class_name": "lancer"
+  },
+  "22": {
+   "name": "Romulus",
+   "class_name": "lancer"
+  },
+  "23": {
+   "name": "Medusa",
+   "class_name": "rider"
+  },
+  "24": {
+   "name": "Georgios",
+   "class_name": "rider"
+  },
+  "25": {
+   "name": "Edward Teach",
+   "class_name": "rider"
+  },
+  "26": {
+   "name": "Boudica",
+   "class_name": "rider"
+  },
+  "27": {
+   "name": "Ushiwakamaru",
+   "class_name": "rider"
+  },
+  "28": {
+   "name": "Alexander",
+   "class_name": "rider"
+  },
+  "29": {
+   "name": "Marie Antoinette",
+   "class_name": "rider"
+  },
+  "30": {
+   "name": "Martha",
+   "class_name": "rider"
+  },
+  "31": {
+   "name": "Medea",
+   "class_name": "caster"
+  },
+  "32": {
+   "name": "Gilles de Rais",
+   "class_name": "caster"
+  },
+  "33": {
+   "name": "Hans Christian Andersen",
+   "class_name": "caster"
+  },
+  "34": {
+   "name": "William Shakespeare",
+   "class_name": "caster"
+  },
+  "35": {
+   "name": "Mephistopheles",
+   "class_name": "caster"
+  },
+  "36": {
+   "name": "Wolfgang Amadeus Mozart",
+   "class_name": "caster"
+  },
+  "37": {
+   "name": "Zhuge Liang (Lord El-Melloi II)",
+   "class_name": "caster"
+  },
+  "38": {
+   "name": "Cú Chulainn",
+   "class_name": "caster"
+  },
+  "39": {
+   "name": "Sasaki Kojirou",
+   "class_name": "assassin"
+  },
+  "40": {
+   "name": "Hassan of the Cursed Arm",
+   "class_name": "assassin"
+  },
+  "41": {
+   "name": "Stheno",
+   "class_name": "assassin"
+  },
+  "42": {
+   "name": "Jing Ke",
+   "class_name": "assassin"
+  },
+  "43": {
+   "name": "Charles-Henri Sanson",
+   "class_name": "assassin"
+  },
+  "44": {
+   "name": "Phantom of the Opera",
+   "class_name": "assassin"
+  },
+  "45": {
+   "name": "Mata Hari",
+   "class_name": "assassin"
+  },
+  "46": {
+   "name": "Carmilla",
+   "class_name": "assassin"
+  },
+  "47": {
+   "name": "Heracles",
+   "class_name": "berserker"
+  },
+  "48": {
+   "name": "Lancelot",
+   "class_name": "berserker"
+  },
+  "49": {
+   "name": "Lu Bu Fengxian",
+   "class_name": "berserker"
+  },
+  "50": {
+   "name": "Spartacus",
+   "class_name": "berserker"
+  },
+  "51": {
+   "name": "Sakata Kintoki",
+   "class_name": "berserker"
+  },
+  "52": {
+   "name": "Vlad III",
+   "class_name": "berserker"
+  },
+  "53": {
+   "name": "Asterios",
+   "class_name": "berserker"
+  },
+  "54": {
+   "name": "Caligula",
+   "class_name": "berserker"
+  },
+  "55": {
+   "name": "Darius III",
+   "class_name": "berserker"
+  },
+  "56": {
+   "name": "Kiyohime",
+   "class_name": "berserker"
+  },
+  "57": {
+   "name": "Eric Bloodaxe",
+   "class_name": "berserker"
+  },
+  "58": {
+   "name": "Tamamo Cat",
+   "class_name": "berserker"
+  },
+  "59": {
+   "name": "Jeanne d'Arc",
+   "class_name": "ruler"
+  },
+  "60": {
+   "name": "Orion",
+   "class_name": "archer"
+  },
+  "61": {
+   "name": "Elisabeth Báthory (Halloween)",
+   "class_name": "caster"
+  },
+  "62": {
+   "name": "Tamamo-no-Mae",
+   "class_name": "caster"
+  },
+  "63": {
+   "name": "David",
+   "class_name": "archer"
+  },
+  "64": {
+   "name": "Hektor",
+   "class_name": "lancer"
+  },
+  "65": {
+   "name": "Francis Drake",
+   "class_name": "rider"
+  },
+  "66": {
+   "name": "Anne Bonny & Mary Read",
+   "class_name": "rider"
+  },
+  "67": {
+   "name": "Medea (Lily)",
+   "class_name": "caster"
+  },
+  "68": {
+   "name": "Okita Souji",
+   "class_name": "saber"
+  },
+  "69": {
+   "name": "Oda Nobunaga",
+   "class_name": "archer"
+  },
+  "70": {
+   "name": "Scáthach",
+   "class_name": "lancer"
+  },
+  "71": {
+   "name": "Diarmuid Ua Duibhne",
+   "class_name": "lancer"
+  },
+  "72": {
+   "name": "Fergus mac Róich",
+   "class_name": "saber"
+  },
+  "73": {
+   "name": "Altria Pendragon (Santa Alter)",
+   "class_name": "rider"
+  },
+  "74": {
+   "name": "Nursery Rhyme",
+   "class_name": "caster"
+  },
+  "75": {
+   "name": "Jack the Ripper",
+   "class_name": "assassin"
+  },
+  "76": {
+   "name": "Mordred",
+   "class_name": "saber"
+  },
+  "77": {
+   "name": "Nikola Tesla",
+   "class_name": "archer"
+  },
+  "78": {
+   "name": "Altria Pendragon (Alter)",
+   "class_name": "lancer"
+  },
+  "79": {
+   "name": "Paracelsus von Hohenheim",
+   "class_name": "caster"
+  },
+  "80": {
+   "name": "Charles Babbage",
+   "class_name": "caster"
+  },
+  "81": {
+   "name": "Henry Jekyll & Hyde",
+   "class_name": "assassin"
+  },
+  "82": {
+   "name": "Frankenstein",
+   "class_name": "berserker"
+  },
+  "84": {
+   "name": "Arjuna",
+   "class_name": "archer"
+  },
+  "85": {
+   "name": "Karna",
+   "class_name": "lancer"
+  },
+  "86": {
+   "name": "Mysterious Heroine X",
+   "class_name": "assassin"
+  },
+  "87": {
+   "name": "Fionn mac Cumhaill",
+   "class_name": "lancer"
+  },
+  "88": {
+   "name": "Brynhild",
+   "class_name": "lancer"
+  },
+  "89": {
+   "name": "Beowulf",
+   "class_name": "berserker"
+  },
+  "90": {
+   "name": "Nero Claudius (Bride)",
+   "class_name": "saber"
+  },
+  "91": {
+   "name": "Ryougi Shiki (Saber)",
+   "class_name": "saber"
+  },
+  "92": {
+   "name": "Ryougi Shiki (Assassin)",
+   "class_name": "assassin"
+  },
+  "93": {
+   "name": "Amakusa Shirou",
+   "class_name": "ruler"
+  },
+  "94": {
+   "name": "Astolfo",
+   "class_name": "rider"
+  },
+  "95": {
+   "name": "Gilgamesh (Child)",
+   "class_name": "archer"
+  },
+  "96": {
+   "name": "Edmond Dantès",
+   "class_name": "avenger"
+  },
+  "97": {
+   "name": "Florence Nightingale",
+   "class_name": "berserker"
+  },
+  "98": {
+   "name": "Cú Chulainn (Alter)",
+   "class_name": "berserker"
+  },
+  "99": {
+   "name": "Queen Medb",
+   "class_name": "rider"
+  },
+  "100": {
+   "name": "Helena Blavatsky",
+   "class_name": "caster"
+  },
+  "101": {
+   "name": "Rama",
+   "class_name": "saber"
+  },
+  "102": {
+   "name": "Li Shuwen",
+   "class_name": "lancer"
+  },
+  "103": {
+   "name": "Thomas Edison",
+   "class_name": "caster"
+  },
+  "104": {
+   "name": "Geronimo",
+   "class_name": "caster"
+  },
+  "105": {
+   "name": "Billy the Kid",
+   "class_name": "archer"
+  },
+  "106": {
+   "name": "Jeanne d'Arc (Alter)",
+   "class_name": "avenger"
+  },
+  "107": {
+   "name": "Aŋra Mainiiu",
+   "class_name": "avenger"
+  },
+  "108": {
+   "name": "Iskandar",
+   "class_name": "rider"
+  },
+  "109": {
+   "name": "Emiya (Assassin)",
+   "class_name": "assassin"
+  },
+  "110": {
+   "name": "Hassan of the Hundred Personas",
+   "class_name": "assassin"
+  },
+  "111": {
+   "name": "Irisviel (Holy Grail)",
+   "class_name": "caster"
+  },
+  "112": {
+   "name": "Shuten-Douji",
+   "class_name": "assassin"
+  },
+  "113": {
+   "name": "Xuanzang Sanzang",
+   "class_name": "caster"
+  },
+  "114": {
+   "name": "Minamoto-no-Raikou",
+   "class_name": "berserker"
+  },
+  "115": {
+   "name": "Sakata Kintoki (Rider)",
+   "class_name": "rider"
+  },
+  "116": {
+   "name": "Ibaraki-Douji",
+   "class_name": "berserker"
+  },
+  "117": {
+   "name": "Fuuma \"Evil-wind\" Kotarou",
+   "class_name": "assassin"
+  },
+  "118": {
+   "name": "Ozymandias",
+   "class_name": "rider"
+  },
+  "119": {
+   "name": "Altria Pendragon (Lancer)",
+   "class_name": "lancer"
+  },
+  "120": {
+   "name": "Nitocris",
+   "class_name": "caster"
+  },
+  "121": {
+   "name": "Lancelot",
+   "class_name": "saber"
+  },
+  "122": {
+   "name": "Tristan",
+   "class_name": "archer"
+  },
+  "123": {
+   "name": "Gawain",
+   "class_name": "saber"
+  },
+  "124": {
+   "name": "Hassan of the Serenity",
+   "class_name": "assassin"
+  },
+  "125": {
+   "name": "Tawara Touta",
+   "class_name": "archer"
+  },
+  "126": {
+   "name": "Bedivere",
+   "class_name": "saber"
+  },
+  "127": {
+   "name": "Leonardo da Vinci",
+   "class_name": "caster"
+  },
+  "128": {
+   "name": "Tamamo-no-Mae (Lancer)",
+   "class_name": "lancer"
+  },
+  "129": {
+   "name": "Altria Pendragon (Archer)",
+   "class_name": "archer"
+  },
+  "130": {
+   "name": "Marie Antoinette (Caster)",
+   "class_name": "caster"
+  },
+  "131": {
+   "name": "Anne Bonny & Mary Read (Archer)",
+   "class_name": "archer"
+  },
+  "132": {
+   "name": "Mordred (Rider)",
+   "class_name": "rider"
+  },
+  "133": {
+   "name": "Scáthach (Assassin)",
+   "class_name": "assassin"
+  },
+  "134": {
+   "name": "Kiyohime (Lancer)",
+   "class_name": "lancer"
+  },
+  "135": {
+   "name": "Martha (Ruler)",
+   "class_name": "ruler"
+  },
+  "136": {
+   "name": "Illyasviel von Einzbern",
+   "class_name": "caster"
+  },
+  "137": {
+   "name": "Chloe von Einzbern",
+   "class_name": "archer"
+  },
+  "138": {
+   "name": "Elisabeth Báthory (Brave)",
+   "class_name": "saber"
+  },
+  "139": {
+   "name": "Cleopatra",
+   "class_name": "assassin"
+  },
+  "140": {
+   "name": "Vlad III (EXTRA)",
+   "class_name": "lancer"
+  },
+  "141": {
+   "name": "Jeanne d'Arc Alter Santa Lily",
+   "class_name": "lancer"
+  },
+  "142": {
+   "name": "Ishtar",
+   "class_name": "archer"
+  },
+  "143": {
+   "name": "Enkidu",
+   "class_name": "lancer"
+  },
+  "144": {
+   "name": "Quetzalcoatl",
+   "class_name": "rider"
+  },
+  "145": {
+   "name": "Gilgamesh",
+   "class_name": "caster"
+  },
+  "146": {
+   "name": "Medusa",
+   "class_name": "lancer"
+  },
+  "147": {
+   "name": "Gorgon",
+   "class_name": "avenger"
+  },
+  "148": {
+   "name": "Jaguar Warrior",
+   "class_name": "lancer"
+  },
+  "150": {
+   "name": "Merlin",
+   "class_name": "caster"
+  },
+  "153": {
+   "name": "Miyamoto Musashi",
+   "class_name": "saber"
+  },
+  "154": {
+   "name": "\"First Hassan\"",
+   "class_name": "assassin"
+  },
+  "155": {
+   "name": "Mysterious Heroine X (Alter)",
+   "class_name": "berserker"
+  },
+  "156": {
+   "name": "James Moriarty",
+   "class_name": "archer"
+  },
+  "157": {
+   "name": "Emiya (Alter)",
+   "class_name": "archer"
+  },
+  "158": {
+   "name": "Hessian Lobo",
+   "class_name": "avenger"
+  },
+  "159": {
+   "name": "Yan Qing",
+   "class_name": "assassin"
+  },
+  "160": {
+   "name": "Arthur Pendragon (Prototype)",
+   "class_name": "saber"
+  },
+  "161": {
+   "name": "Hijikata Toshizo",
+   "class_name": "berserker"
+  },
+  "162": {
+   "name": "Chacha",
+   "class_name": "berserker"
+  },
+  "163": {
+   "name": "Meltryllis",
+   "class_name": "alterEgo"
+  },
+  "164": {
+   "name": "Passionlip",
+   "class_name": "alterEgo"
+  },
+  "165": {
+   "name": "Suzuka Gozen",
+   "class_name": "saber"
+  },
+  "166": {
+   "name": "BB",
+   "class_name": "moonCancer"
+  },
+  "167": {
+   "name": "Sessyoin Kiara",
+   "class_name": "alterEgo"
+  },
+  "169": {
+   "name": "Scheherazade",
+   "class_name": "caster"
+  },
+  "170": {
+   "name": "Wu Zetian",
+   "class_name": "assassin"
+  },
+  "171": {
+   "name": "Penthesilea",
+   "class_name": "berserker"
+  },
+  "172": {
+   "name": "Christopher Columbus",
+   "class_name": "rider"
+  },
+  "173": {
+   "name": "Sherlock Holmes",
+   "class_name": "ruler"
+  },
+  "174": {
+   "name": "Paul Bunyan",
+   "class_name": "berserker"
+  },
+  "175": {
+   "name": "Nero Claudius (Caster)",
+   "class_name": "caster"
+  },
+  "176": {
+   "name": "Frankenstein (Saber)",
+   "class_name": "saber"
+  },
+  "177": {
+   "name": "Nitocris (Assassin)",
+   "class_name": "assassin"
+  },
+  "178": {
+   "name": "Oda Nobunaga (Berserker)",
+   "class_name": "berserker"
+  },
+  "179": {
+   "name": "Altria Pendragon Alter (Rider)",
+   "class_name": "rider"
+  },
+  "180": {
+   "name": "Helena Blavatsky (Archer)",
+   "class_name": "archer"
+  },
+  "181": {
+   "name": "Minamoto-no-Raikou (Lancer)",
+   "class_name": "lancer"
+  },
+  "182": {
+   "name": "Ishtar (Rider)",
+   "class_name": "rider"
+  },
+  "183": {
+   "name": "Pārvatī",
+   "class_name": "lancer"
+  },
+  "184": {
+   "name": "Tomoe Gozen",
+   "class_name": "archer"
+  },
+  "185": {
+   "name": "Mochizuki Chiyome",
+   "class_name": "assassin"
+  },
+  "186": {
+   "name": "Houzouin Inshun",
+   "class_name": "lancer"
+  },
+  "187": {
+   "name": "Yagyu Tajima-no-kami Munenori",
+   "class_name": "saber"
+  },
+  "188": {
+   "name": "Katou \"Black Kite\" Danzo",
+   "class_name": "assassin"
+  },
+  "189": {
+   "name": "Osakabehime",
+   "class_name": "assassin"
+  },
+  "190": {
+   "name": "Mecha Eli-chan",
+   "class_name": "alterEgo"
+  },
+  "191": {
+   "name": "Mecha Eli-chan Mk.II",
+   "class_name": "alterEgo"
+  },
+  "192": {
+   "name": "Circe",
+   "class_name": "caster"
+  },
+  "193": {
+   "name": "Nezha",
+   "class_name": "lancer"
+  },
+  "194": {
+   "name": "Queen of Sheba",
+   "class_name": "caster"
+  },
+  "195": {
+   "name": "Abigail Williams",
+   "class_name": "foreigner"
+  },
+  "196": {
+   "name": "Ereshkigal",
+   "class_name": "lancer"
+  },
+  "197": {
+   "name": "Attila the San(ta)",
+   "class_name": "archer"
+  },
+  "198": {
+   "name": "Katsushika Hokusai",
+   "class_name": "foreigner"
+  },
+  "199": {
+   "name": "Semiramis",
+   "class_name": "assassin"
+  },
+  "200": {
+   "name": "Asagami Fujino",
+   "class_name": "archer"
+  },
+  "201": {
+   "name": "Anastasia",
+   "class_name": "caster"
+  },
+  "202": {
+   "name": "Atalante (Alter)",
+   "class_name": "berserker"
+  },
+  "203": {
+   "name": "Avicebron",
+   "class_name": "caster"
+  },
+  "204": {
+   "name": "Antonio Salieri",
+   "class_name": "avenger"
+  },
+  "205": {
+   "name": "Ivan the Terrible",
+   "class_name": "rider"
+  },
+  "206": {
+   "name": "Achilles",
+   "class_name": "rider"
+  },
+  "207": {
+   "name": "Chiron",
+   "class_name": "archer"
+  },
+  "208": {
+   "name": "Sieg",
+   "class_name": "caster"
+  },
+  "209": {
+   "name": "Okita Souji (Alter)",
+   "class_name": "alterEgo"
+  },
+  "210": {
+   "name": "Okada Izo",
+   "class_name": "assassin"
+  },
+  "211": {
+   "name": "Sakamoto Ryouma",
+   "class_name": "rider"
+  },
+  "212": {
+   "name": "Napoleon",
+   "class_name": "archer"
+  },
+  "213": {
+   "name": "Sigurd",
+   "class_name": "saber"
+  },
+  "214": {
+   "name": "Valkyrie",
+   "class_name": "lancer"
+  },
+  "215": {
+   "name": "Scáthach-Skadi",
+   "class_name": "caster"
+  },
+  "216": {
+   "name": "Jeanne d'Arc (Archer)",
+   "class_name": "archer"
+  },
+  "217": {
+   "name": "Ibaraki-Douji (Lancer)",
+   "class_name": "lancer"
+  },
+  "218": {
+   "name": "Ushiwakamaru (Assassin)",
+   "class_name": "assassin"
+  },
+  "219": {
+   "name": "Jeanne d'Arc Alter (Berserker)",
+   "class_name": "berserker"
+  },
+  "220": {
+   "name": "BB",
+   "class_name": "moonCancer"
+  },
+  "221": {
+   "name": "Medb (Saber)",
+   "class_name": "saber"
+  },
+  "222": {
+   "name": "Mysterious Heroine XX",
+   "class_name": "foreigner"
+  },
+  "223": {
+   "name": "Diarmuid Ua Duibhne",
+   "class_name": "saber"
+  },
+  "224": {
+   "name": "Sitonai",
+   "class_name": "alterEgo"
+  },
+  "225": {
+   "name": "Shuten-Douji (Caster)",
+   "class_name": "caster"
+  },
+  "226": {
+   "name": "Xiang Yu",
+   "class_name": "berserker"
+  },
+  "227": {
+   "name": "Prince of Lan Ling",
+   "class_name": "saber"
+  },
+  "228": {
+   "name": "Qin Liangyu",
+   "class_name": "lancer"
+  },
+  "229": {
+   "name": "Qin Shi Huang",
+   "class_name": "ruler"
+  },
+  "230": {
+   "name": "Yu Mei-ren",
+   "class_name": "assassin"
+  },
+  "231": {
+   "name": "Red Hare",
+   "class_name": "rider"
+  },
+  "232": {
+   "name": "Bradamante",
+   "class_name": "lancer"
+  },
+  "233": {
+   "name": "Quetzalcoatl (Samba/Santa)",
+   "class_name": "ruler"
+  },
+  "234": {
+   "name": "Beni-Enma",
+   "class_name": "saber"
+  },
+  "235": {
+   "name": "Li Shuwen",
+   "class_name": "assassin"
+  },
+  "236": {
+   "name": "Miyu Edelfelt",
+   "class_name": "caster"
+  },
+  "237": {
+   "name": "Murasaki Shikibu",
+   "class_name": "caster"
+  },
+  "238": {
+   "name": "Kingprotea",
+   "class_name": "alterEgo"
+  },
+  "239": {
+   "name": "Kama",
+   "class_name": "assassin"
+  },
+  "241": {
+   "name": "Sima Yi (Reines)",
+   "class_name": "rider"
+  },
+  "242": {
+   "name": "Astraea",
+   "class_name": "ruler"
+  },
+  "243": {
+   "name": "Gray",
+   "class_name": "assassin"
+  },
+  "244": {
+   "name": "Great Stone Statue God",
+   "class_name": "moonCancer"
+  },
+  "245": {
+   "name": "Lakshmi Bai",
+   "class_name": "saber"
+  },
+  "246": {
+   "name": "William Tell",
+   "class_name": "archer"
+  },
+  "247": {
+   "name": "Arjuna (Alter)",
+   "class_name": "berserker"
+  },
+  "248": {
+   "name": "Aśvatthāman",
+   "class_name": "archer"
+  },
+  "249": {
+   "name": "Asclepius",
+   "class_name": "caster"
+  },
+  "250": {
+   "name": "Oda Nobunaga",
+   "class_name": "avenger"
+  },
+  "251": {
+   "name": "Mori Nagayoshi",
+   "class_name": "berserker"
+  },
+  "252": {
+   "name": "Nagao Kagetora",
+   "class_name": "lancer"
+  },
+  "253": {
+   "name": "Leonardo da Vinci",
+   "class_name": "rider"
+  },
+  "254": {
+   "name": "Jason",
+   "class_name": "saber"
+  },
+  "255": {
+   "name": "Paris",
+   "class_name": "archer"
+  },
+  "256": {
+   "name": "Gareth",
+   "class_name": "lancer"
+  },
+  "257": {
+   "name": "Bartholomew Roberts",
+   "class_name": "rider"
+  },
+  "258": {
+   "name": "Chen Gong",
+   "class_name": "caster"
+  },
+  "259": {
+   "name": "Charlotte Corday",
+   "class_name": "assassin"
+  },
+  "260": {
+   "name": "Salome",
+   "class_name": "berserker"
+  },
+  "261": {
+   "name": "Miyamoto Musashi (Berserker)",
+   "class_name": "berserker"
+  },
+  "262": {
+   "name": "Osakabehime (Archer)",
+   "class_name": "archer"
+  },
+  "263": {
+   "name": "Carmilla (Rider)",
+   "class_name": "rider"
+  },
+  "264": {
+   "name": "Katsushika Hokusai (Saber)",
+   "class_name": "saber"
+  },
+  "265": {
+   "name": "Altria Pendragon (Ruler)",
+   "class_name": "ruler"
+  },
+  "266": {
+   "name": "Mysterious Alter Ego Λ",
+   "class_name": "lancer"
+  },
+  "267": {
+   "name": "Okita J. Souji",
+   "class_name": "assassin"
+  },
+  "268": {
+   "name": "Space Ishtar",
+   "class_name": "avenger"
+  },
+  "269": {
+   "name": "Calamity Jane",
+   "class_name": "archer"
+  },
+  "270": {
+   "name": "Astolfo (Saber)",
+   "class_name": "saber"
+  },
+  "271": {
+   "name": "Florence Nightingale (Santa)",
+   "class_name": "archer"
+  },
+  "272": {
+   "name": "Super Orion",
+   "class_name": "archer"
+  },
+  "273": {
+   "name": "Mandricardo",
+   "class_name": "rider"
+  },
+  "274": {
+   "name": "Europa",
+   "class_name": "rider"
+  },
+  "275": {
+   "name": "Yang Guifei",
+   "class_name": "foreigner"
+  },
+  "276": {
+   "name": "Sei Shounagon",
+   "class_name": "archer"
+  },
+  "277": {
+   "name": "Odysseus",
+   "class_name": "rider"
+  },
+  "278": {
+   "name": "Dioscuri",
+   "class_name": "saber"
+  },
+  "279": {
+   "name": "Caenis",
+   "class_name": "lancer"
+  },
+  "280": {
+   "name": "Romulus=Quirinus",
+   "class_name": "lancer"
+  },
+  "281": {
+   "name": "Voyager",
+   "class_name": "foreigner"
+  },
+  "282": {
+   "name": "Kijyo Koyo",
+   "class_name": "berserker"
+  },
+  "283": {
+   "name": "Utsumi Erice",
+   "class_name": "lancer"
+  },
+  "284": {
+   "name": "Altria Caster",
+   "class_name": "caster"
+  },
+  "285": {
+   "name": "Sessyoin Kiara (Moon Cancer)",
+   "class_name": "moonCancer"
+  },
+  "286": {
+   "name": "Illyasviel von Einzbern (Archer)",
+   "class_name": "archer"
+  },
+  "287": {
+   "name": "Brynhild (Berserker)",
+   "class_name": "berserker"
+  },
+  "288": {
+   "name": "Yu Mei-ren (Lancer)",
+   "class_name": "lancer"
+  },
+  "289": {
+   "name": "Abigail Williams (Summer)",
+   "class_name": "foreigner"
+  },
+  "290": {
+   "name": "Tomoe Gozen (Saber)",
+   "class_name": "saber"
+  },
+  "291": {
+   "name": "Murasaki Shikibu (Rider)",
+   "class_name": "rider"
+  },
+  "292": {
+   "name": "Himiko",
+   "class_name": "ruler"
+  },
+  "293": {
+   "name": "Saito Hajime",
+   "class_name": "saber"
+  },
+  "294": {
+   "name": "Oda Nobukatsu",
+   "class_name": "archer"
+  },
+  "295": {
+   "name": "Van Gogh",
+   "class_name": "foreigner"
+  },
+  "296": {
+   "name": "Nemo",
+   "class_name": "rider"
+  },
+  "297": {
+   "name": "Ashiya Douman",
+   "class_name": "alterEgo"
+  },
+  "298": {
+   "name": "Watanabe-no-Tsuna",
+   "class_name": "saber"
+  },
+  "299": {
+   "name": "Ibuki-Douji",
+   "class_name": "saber"
+  },
+  "300": {
+   "name": "Vritra",
+   "class_name": "lancer"
+  },
+  "301": {
+   "name": "Karna (Santa)",
+   "class_name": "saber"
+  },
+  "302": {
+   "name": "Senji Muramasa",
+   "class_name": "saber"
+  },
+  "303": {
+   "name": "Taira-no-Kagekiyo",
+   "class_name": "avenger"
+  },
+  "304": {
+   "name": "Kiichi Hogen",
+   "class_name": "assassin"
+  },
+  "305": {
+   "name": "Amor (Caren)",
+   "class_name": "ruler"
+  },
+  "306": {
+   "name": "Galatea",
+   "class_name": "berserker"
+  },
+  "307": {
+   "name": "Miss Crane",
+   "class_name": "caster"
+  },
+  "308": {
+   "name": "Mysterious Idol X (Alter)",
+   "class_name": "foreigner"
+  },
+  "309": {
+   "name": "Morgan",
+   "class_name": "berserker"
+  },
+  "310": {
+   "name": "Tam Lin Gawain",
+   "class_name": "saber"
+  },
+  "311": {
+   "name": "Tam Lin Tristan",
+   "class_name": "archer"
+  },
+  "312": {
+   "name": "Tam Lin Lancelot",
+   "class_name": "lancer"
+  },
+  "313": {
+   "name": "Percival",
+   "class_name": "lancer"
+  },
+  "314": {
+   "name": "Koyanskaya of Light",
+   "class_name": "assassin"
+  },
+  "315": {
+   "name": "Habetrot",
+   "class_name": "rider"
+  },
+  "316": {
+   "name": "Oberon",
+   "class_name": "pretender"
+  },
+  "317": {
+   "name": "Okita Souji Alter (Saber)",
+   "class_name": "saber"
+  },
+  "318": {
+   "name": "Anastasia & Viy",
+   "class_name": "archer"
+  },
+  "319": {
+   "name": "Charlotte Corday (Caster)",
+   "class_name": "caster"
+  },
+  "320": {
+   "name": "Leonardo da Vinci (Ruler)",
+   "class_name": "ruler"
+  },
+  "321": {
+   "name": "Kama (Avenger)",
+   "class_name": "avenger"
+  },
+  "322": {
+   "name": "Caenis (Rider)",
+   "class_name": "rider"
+  },
+  "323": {
+   "name": "Sei Shounagon (Berserker)",
+   "class_name": "berserker"
+  },
+  "324": {
+   "name": "Jacques de Molay",
+   "class_name": "foreigner"
+  },
+  "325": {
+   "name": "Zenobia",
+   "class_name": "archer"
+  },
+  "326": {
+   "name": "Elisabeth Báthory (Cinderella)",
+   "class_name": "rider"
+  },
+  "327": {
+   "name": "Izumo-no-Okuni",
+   "class_name": "caster"
+  },
+  "328": {
+   "name": "Mysterious Ranmaru X",
+   "class_name": "avenger"
+  },
+  "329": {
+   "name": "Sakamoto Ryouma (Lancer)",
+   "class_name": "lancer"
+  },
+  "330": {
+   "name": "Martha (Santa)",
+   "class_name": "caster"
+  },
+  "331": {
+   "name": "Taigong Wang",
+   "class_name": "rider"
+  },
+  "332": {
+   "name": "Dobrynya Nikitich",
+   "class_name": "rider"
+  },
+  "334": {
+   "name": "Koyanskaya of Dark",
+   "class_name": "foreigner"
+  },
+  "335": {
+   "name": "Hephaistíon",
+   "class_name": "pretender"
+  },
+  "336": {
+   "name": "Manannan mac Lir (Bazett)",
+   "class_name": "alterEgo"
+  },
+  "337": {
+   "name": "Hai Bà Trưng",
+   "class_name": "saber"
+  },
+  "338": {
+   "name": "Taisui Xingjun",
+   "class_name": "alterEgo"
+  },
+  "339": {
+   "name": "Super Bunyan",
+   "class_name": "alterEgo"
+  },
+  "340": {
+   "name": "Daikokuten",
+   "class_name": "caster"
+  },
+  "341": {
+   "name": "Mary Anning",
+   "class_name": "lancer"
+  },
+  "342": {
+   "name": "Kōnstantînos XI",
+   "class_name": "rider"
+  },
+  "343": {
+   "name": "Charlemagne",
+   "class_name": "saber"
+  },
+  "344": {
+   "name": "Roland",
+   "class_name": "saber"
+  },
+  "345": {
+   "name": "Kriemhild",
+   "class_name": "berserker"
+  },
+  "346": {
+   "name": "James Moriarty",
+   "class_name": "ruler"
+  },
+  "347": {
+   "name": "Don Quixote",
+   "class_name": "lancer"
+  },
+  "348": {
+   "name": "Zhang Jue",
+   "class_name": "caster"
+  },
+  "349": {
+   "name": "Kyokutei Bakin",
+   "class_name": "rider"
+  },
+  "350": {
+   "name": "Minamoto-no-Tametomo",
+   "class_name": "archer"
+  },
+  "351": {
+   "name": "Archetype: EARTH",
+   "class_name": "moonCancer"
+  },
+  "352": {
+   "name": "Xu Fu",
+   "class_name": "alterEgo"
+  },
+  "353": {
+   "name": "Lady Avalon",
+   "class_name": "pretender"
+  },
+  "354": {
+   "name": "Gareth (Saber)",
+   "class_name": "saber"
+  },
+  "355": {
+   "name": "Ibuki-Douji (Berserker)",
+   "class_name": "berserker"
+  },
+  "356": {
+   "name": "Utsumi Erice (Avenger)",
+   "class_name": "avenger"
+  },
+  "357": {
+   "name": "Scáthach-Skadi (Ruler)",
+   "class_name": "ruler"
+  },
+  "358": {
+   "name": "Wu Zetian (Caster)",
+   "class_name": "caster"
+  },
+  "359": {
+   "name": "Thrúd",
+   "class_name": "assassin"
+  },
+  "360": {
+   "name": "Hildr",
+   "class_name": "assassin"
+  },
+  "361": {
+   "name": "Ortlinde",
+   "class_name": "assassin"
+  },
+  "362": {
+   "name": "Sen-no-Rikyu",
+   "class_name": "berserker"
+  },
+  "363": {
+   "name": "Yamanami Keisuke",
+   "class_name": "saber"
+  },
+  "364": {
+   "name": "Iyo",
+   "class_name": "ruler"
+  },
+  "365": {
+   "name": "Huyan Zhuo",
+   "class_name": "assassin"
+  },
+  "366": {
+   "name": "Huang Feihu",
+   "class_name": "rider"
+  },
+  "367": {
+   "name": "Elisa the Nine-Tattooed Dragon",
+   "class_name": "pretender"
+  },
+  "368": {
+   "name": "Britomart",
+   "class_name": "lancer"
+  },
+  "369": {
+   "name": "Grigori Rasputin",
+   "class_name": "alterEgo"
+  },
+  "370": {
+   "name": "Nitocris (Alter)",
+   "class_name": "avenger"
+  },
+  "371": {
+   "name": "Tezcatlipoca",
+   "class_name": "assassin"
+  },
+  "372": {
+   "name": "Tlāloc",
+   "class_name": "pretender"
+  },
+  "373": {
+   "name": "Kukulcan",
+   "class_name": "foreigner"
+  },
+  "374": {
+   "name": "Pope Johanna",
+   "class_name": "ruler"
+  },
+  "375": {
+   "name": "Takasugi Shinsaku",
+   "class_name": "archer"
+  },
+  "376": {
+   "name": "Larva/Tiamat",
+   "class_name": "alterEgo"
+  },
+  "377": {
+   "name": "Sodom's Beast/Draco",
+   "class_name": "beast"
+  },
+  "378": {
+   "name": "Locusta",
+   "class_name": "assassin"
+  },
+  "379": {
+   "name": "Sétanta",
+   "class_name": "saber"
+  },
+  "380": {
+   "name": "Kashin Koji",
+   "class_name": "assassin"
+  },
+  "381": {
+   "name": "Bhīma",
+   "class_name": "lancer"
+  },
+  "382": {
+   "name": "Duryodhana",
+   "class_name": "berserker"
+  },
+  "383": {
+   "name": "Durgā",
+   "class_name": "archer"
+  },
+  "384": {
+   "name": "Medusa",
+   "class_name": "saber"
+  },
+  "385": {
+   "name": "Aesc the Rain Witch",
+   "class_name": "caster"
+  },
+  "386": {
+   "name": "Altria Caster",
+   "class_name": "berserker"
+  },
+  "387": {
+   "name": "Suzuka Gozen (Vacay)",
+   "class_name": "rider"
+  },
+  "388": {
+   "name": "Chloe von Einzbern",
+   "class_name": "avenger"
+  },
+  "389": {
+   "name": "Cnoc na Riabh Yaraändoo",
+   "class_name": "foreigner"
+  },
+  "390": {
+   "name": "Mélusine",
+   "class_name": "ruler"
+  },
+  "391": {
+   "name": "UDK-Barghest",
+   "class_name": "archer"
+  },
+  "392": {
+   "name": "Cait Cú MikoCer",
+   "class_name": "pretender"
+  },
+  "393": {
+   "name": "Wandjina",
+   "class_name": "foreigner"
+  },
+  "394": {
+   "name": "Ptolemaîos",
+   "class_name": "archer"
+  },
+  "395": {
+   "name": "Sugitani Zenjubou",
+   "class_name": "archer"
+  },
+  "396": {
+   "name": "Thēseus",
+   "class_name": "saber"
+  },
+  "397": {
+   "name": "Takeda Harunobu",
+   "class_name": "rider"
+  },
+  "398": {
+   "name": "Nagakura Shinpachi",
+   "class_name": "berserker"
+  },
+  "399": {
+   "name": "Saika Magoichi",
+   "class_name": "archer"
+  },
+  "400": {
+   "name": "Uesugi Kenshin",
+   "class_name": "ruler"
+  },
+  "401": {
+   "name": "Nemo (Santa)",
+   "class_name": "rider"
+  },
+  "402": {
+   "name": "Yamato Takeru",
+   "class_name": "saber"
+  },
+  "403": {
+   "name": "Minamoto-no-Raikou/Ushi Gozen",
+   "class_name": "avenger"
+  },
+  "404": {
+   "name": "Yui Shousetsu",
+   "class_name": "caster"
+  },
+  "405": {
+   "name": "Miyamoto Iori",
+   "class_name": "saber"
+  },
+  "406": {
+   "name": "Andromeda",
+   "class_name": "rider"
+  },
+  "407": {
+   "name": "Marie Antoinette (Alter)",
+   "class_name": "avenger"
+  },
+  "408": {
+   "name": "Hassan of the Shining Star",
+   "class_name": "assassin"
+  },
+  "409": {
+   "name": "Monte Cristo",
+   "class_name": "avenger"
+  },
+  "410": {
+   "name": "Alessandro di Cagliostro",
+   "class_name": "pretender"
+  },
+  "413": {
+   "name": "Aozaki Aoko",
+   "class_name": "foreigner"
+  },
+  "414": {
+   "name": "Sizuki Soujyuro",
+   "class_name": "berserker"
+  },
+  "415": {
+   "name": "Kuonji Alice",
+   "class_name": "caster"
+  },
+  "416": {
+   "name": "Hibiki & Chikagi",
+   "class_name": "alterEgo"
+  },
+  "417": {
+   "name": "Ereshkigal",
+   "class_name": "beastEresh"
+  },
+  "418": {
+   "name": "Mysterious Executor C.I.E.L",
+   "class_name": "moonCancer"
+  },
+  "419": {
+   "name": "Dobrynya Nikitich (Lancer)",
+   "class_name": "lancer"
+  },
+  "420": {
+   "name": "Xu Fu (Avenger)",
+   "class_name": "avenger"
+  },
+  "421": {
+   "name": "BB Dubai",
+   "class_name": "moonCancer"
+  },
+  "422": {
+   "name": "Tenochtitlan (Moon Cancer)",
+   "class_name": "moonCancer"
+  },
+  "423": {
+   "name": "Mysterious Heroine XX (Alter)",
+   "class_name": "foreigner"
+  },
+  "424": {
+   "name": "Kishinami Hakuno",
+   "class_name": "moonCancer"
+  },
+  "425": {
+   "name": "Kishinami Hakuno",
+   "class_name": "moonCancer"
+  },
+  "432": {
+   "name": "Richard I",
+   "class_name": "saber"
+  }
+ }
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "kind": "skill",
+    "servant": 3,
+    "skill": 2,
+    "reason": "Bounded test of a manually chosen self-target skill; verify the team before using this example."
+  }
+]
