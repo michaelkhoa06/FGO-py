@@ -395,6 +395,37 @@ class BattleControllerTests(unittest.TestCase):
         self.assertIn("did not attack", result.reason)
         self.assertEqual(["cards", "cards_back"], [a.kind for a in controller.driver.sent])
 
+    def test_animation_frames_get_speed_taps_only_when_enabled(self):
+        """User tip 2026-09-27: a tap during a skill or NP animation speeds it up."""
+        available = [{"slot": s, "type": "Arts", "sealed": False} for s in (1, 2, 3)]
+        frames = lambda: [observation("before", "cards", cards=available),
+                          *[observation(f"anim-{i}", "unknown") for i in range(6)],
+                          observation("done", "tactical", signals={"turn_advanced": True})]
+        plain = self.controller(frames(), max_polls=50, timeout=100)
+        plain.execute(Action("cards", cards=(1, 2, 3)))
+        self.assertNotIn("speed_tap", [a.kind for a in plain.driver.sent])
+        clock = FakeClock()
+        fast = BattleController(FakeDriver(frames()), monotonic=clock, sleeper=clock.sleep, poll_interval=1,
+                                max_polls=50, timeout=100, speed_taps=True)
+        result = fast.execute(Action("cards", cards=(1, 2, 3)))
+        self.assertEqual("confirmed", result.status)
+        taps = [a.kind for a in fast.driver.sent].count("speed_tap")
+        self.assertEqual(3, taps, "one tap every 2 s over six 1 s animation frames")
+
+    def test_a_single_transition_frame_after_a_skill_tap_gets_no_speed_tap(self):
+        """Live 2026-09-27: that frame led into target selection; a tap cancelled it."""
+        def run(frames):
+            clock = FakeClock()
+            control = BattleController(FakeDriver(frames), monotonic=clock, sleeper=clock.sleep, poll_interval=1,
+                                       max_polls=6, timeout=100, speed_taps=True)
+            control.execute(Action("skill", servant=1, skill=1))
+            return [a.kind for a in control.driver.sent].count("speed_tap")
+        start = observation("before", allies=ready_ally(), wave=1, turn=1)
+        after = [observation(f"cool-{i}", allies=ready_ally(cooldown=5, ready=False), wave=1, turn=1) for i in range(3)]
+        self.assertEqual(0, run([start, observation("transition", "unknown"), *after]))
+        self.assertEqual(1, run([start, observation("anim-1", "unknown"), observation("anim-2", "unknown"),
+                                 observation("anim-3", "unknown"), *after]))
+
     def test_run_stops_after_a_rejected_action(self):
         controller = self.controller([observation("unknown", "unknown")])
         results = controller.run([Action("attack"), Action("attack")])

@@ -13,6 +13,7 @@ from . import order_change as oc
 # The Close button of the game's skill-error dialog. Upstream FGO-py closes the
 # same dialog (its isSkillCastFailed) by pressing 'J' at (704, 573), inside it.
 SKILL_ERROR_CLOSE = (640, 563)
+SPEED_TAP = (880, 95)  # the turn panel; inert outside animations
 
 
 class BattleDriver:
@@ -473,6 +474,16 @@ class BattleDriver:
                 self.trace.record("input", {"serial": self.device.serial, "swipe": [x1, y1, x2, y2],
                                             "ms": ep.SCROLL_MS, "observation_id": self.latest.id})
             self.device.swipe(x1, y1, x2, y2, ep.SCROLL_MS)
+        elif kind == "speed_tap":
+            # User tip 2026-09-27: a tap during a skill or NP animation doubles its
+            # speed. Only sent on an observed animation frame, and on the turn
+            # panel (BATTLE / ENEMY / TURN), which does nothing on the tactical or
+            # card screen if the animation has just ended. FGA taps other points
+            # (Caster.kt extraInfoWindowCloseClick, battleSafeMiddleOfScreenClick),
+            # which can hit an enemy or the Attack button on those screens.
+            if self.latest.phase != "unknown":
+                raise ValueError("A speed-up tap needs an observed animation frame.")
+            self._tap(*SPEED_TAP)
         elif kind == "cards_back":
             # The command-card Back button returns to the tactical screen without
             # committing anything.

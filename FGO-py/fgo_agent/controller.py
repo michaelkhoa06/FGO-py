@@ -70,6 +70,7 @@ class BattleController:
         monotonic: Callable[[], float] = time.monotonic,
         sleeper: Callable[[float], None] = time.sleep,
         trace: TraceSink | None = None,
+        speed_taps: bool = False,
     ) -> None:
         if max_polls < 1:
             raise ValueError("max_polls must be at least one")
@@ -82,6 +83,7 @@ class BattleController:
         self._monotonic = monotonic
         self._sleep = sleeper
         self.trace = trace
+        self.speed_taps = speed_taps
 
     def run(self, actions: list[Action]) -> list[ActionResult]:
         results: list[ActionResult] = []
@@ -514,10 +516,19 @@ class BattleController:
         effect_observed = False
         replaced_frames = 0
         dark_streak = 0
+        sped = False
+        unknown_streak = 0
         for observation in self._poll(deadline):
             if isinstance(observation, _ObservationFailure):
                 return self._observation_error(action, before, last, observation.error)
             last = observation
+            unknown_streak = unknown_streak + 1 if observation.phase == "unknown" else 0
+            # Seen live 2026-09-27: the frame right after tapping Castoria's
+            # targeted skill was still the transition into target selection; a tap
+            # then cancelled it and the skill went unused. Tap once the target is
+            # chosen, or after two animation frames in a row.
+            if not sped and observation.phase == "unknown" and (target_sent or unknown_streak >= 2):
+                sped = self._speed_tap()
             if observation.phase in ("skill_error", "skill_unavailable"):
                 return self._result(action, "rejected", before, observation,
                                     reason=f"skill rejected by {observation.phase}")
@@ -690,14 +701,30 @@ class BattleController:
     # cards, and the card screen stayed for minutes until the run stopped. The
     # attack replaces the card screen within seconds once three cards are taken.
     _CARD_STUCK_SECONDS = 25.0
+    _SPEED_TAP_EVERY = 2.0
+
+    def _speed_tap(self) -> bool:
+        """One tap that speeds up the animation on screen; False when not sent."""
+        if not self.speed_taps:
+            return False
+        try:
+            self._send(Action("speed_tap"))
+        except Exception:
+            return False
+        return True
 
     def _finish_cards(self, action: Action, before: Observation, deadline: float | None) -> ActionResult:
         last = None
         cards_since = None
+        tapped_at = None
         for observation in self._poll(deadline, scale=self._CARD_WAIT_SCALE):
             if isinstance(observation, _ObservationFailure):
                 return self._observation_error(action, before, last, observation.error)
             last = observation
+            if (observation.phase == "unknown" and self.speed_taps
+                    and (tapped_at is None or self._monotonic() - tapped_at >= self._SPEED_TAP_EVERY)):
+                if self._speed_tap():
+                    tapped_at = self._monotonic()
             if observation.phase == CARDS:
                 cards_since = self._monotonic() if cards_since is None else cards_since
                 if self._monotonic() - cards_since >= self._CARD_STUCK_SECONDS:

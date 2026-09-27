@@ -1040,6 +1040,34 @@ Tezcatlipoca (8.3k) at once; losses the turn before were 2.5-4.7k, so
 `_lethal_issue` correctly did not fire. Space Ereshkigal NP'd alone on turn 17
 (484k left). Over 4 attempts this team reached the last bar; the fight is a
 team-strength wall.
+Third Leyline continuation 20260927T202751Z-934b967b (turns 18-23, 18.5 min):
+DEFEAT on turn 23 with the last bar at 51,235 (from 511,137). Codex cited
+`enemy_pressure` ("slot 2 lost 10,395 HP last enemy turn"), fired Castoria's
+protective NP before Tezcatlipoca's each time the boss was near full charge, and
+used Zhuge Liang's charge reduction. On turn 23 Zhuge's NP and Space Ereshkigal's
+NP hit for only ~19k total (the boss resists and heals), and its attacks then
+killed all three.
+Fourth Leyline continuation 20260927T205231Z-dcfc6afa: VICTORY on turn 24 (4.3
+min). Tezcatlipoca, buffed, NP'd the last 50,235 HP. Cernunnos took the original
+attempt plus 5 continuations over two days; team strength was the wall, and each
+fix (NP-seal label, back line, `enemy_pressure`, lethal revision) moved it further.
+
+### Animation speed-up taps (user tip, 2026-09-27)
+A tap during a skill or NP animation doubles its speed. Measured before: a skill
+spent 5-6 s on "unknown" animation frames. FGA taps after each skill/Order Change
+(Caster.kt `extraInfoWindowCloseClick`, "also triggers skill speedup") and in the
+middle of the screen for death/wave/NP (`battleSafeMiddleOfScreenClick`); both
+points can hit an enemy or the Attack/card area if the animation has just ended,
+so the agent taps the turn panel (880, 95) instead, which is inert on the tactical
+and card screens. Controller: one tap after the first "unknown" frame of a skill;
+during a card turn, one tap every 2 s on "unknown" frames. Driver refuses the tap
+unless the latest frame is "unknown". `--speed-taps` (default on). Test
+`test_animation_frames_get_speed_taps_only_when_enabled`.
+Live 2026-09-27 (Cernunnos turn 24): 14 taps; skills confirmed in 5-7 s instead of
+8-11 s. One bug: the first frame after tapping Castoria's targeted skill was the
+transition into target selection, and the tap cancelled it (skill unused, 2-min
+wait). Skill taps now wait until the target is sent or two animation frames in a
+row (`test_a_single_transition_frame_after_a_skill_tap_gets_no_speed_tap`).
 
 ## Next session intent (user, end of 2026-09-24)
 

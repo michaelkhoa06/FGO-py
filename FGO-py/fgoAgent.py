@@ -223,6 +223,8 @@ def parser():
                                 'Anywhere else nothing is tapped.')
             p.add_argument('--party', action=argparse.BooleanOptionalAction, default=True,
                            help='Use the last Confirm Party read (fgoAgent party) if under 4 hours old')
+            p.add_argument('--speed-taps', action=argparse.BooleanOptionalAction, default=True,
+                           help='Tap the turn panel during skill and NP animations to speed them up')
             p.add_argument('--plan-ahead', action='store_true',
                            help='Codex plans the whole battle up front and replans only on deviation')
             p.add_argument('--inspect-enemies', action=argparse.BooleanOptionalAction, default=True,
@@ -360,7 +362,8 @@ def main(argv=None):
             from fgo_agent.battle_runner import BattleRunner
             # A frame now takes ~0.9 s (raw capture + memoized reads), so a 1 s pause
             # between frames was most of every wait. The 120 s timeout stays the bound.
-            controller = BattleController(driver, trace=trace, timeout=120, max_polls=200, poll_interval=0.4)
+            controller = BattleController(driver, trace=trace, timeout=120, max_polls=200, poll_interval=0.4,
+                                          speed_taps=bool(getattr(args, 'speed_taps', True)))
             if getattr(args, 'start_from_party', False):
                 started = start_from_party(device, observer, trace)
                 print(f"Start from party: {started}", flush=True)
