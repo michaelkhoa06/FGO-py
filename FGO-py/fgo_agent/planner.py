@@ -118,6 +118,9 @@ class PlannerPolicy:
         # drop on two clean turns (unseen ATK, Craft Essences, crits). The ratio is
         # learned per battle and applied to reported estimates.
         self._calibration: list[float] = []
+        # HP at the last tactical frame of the current turn, and the losses over
+        # the last enemy turn (see _track_incoming).
+        self._hp_turn, self._hp_last, self._incoming = None, {}, None
         self._pending_hit: dict | None = None
         try:
             self._class_relation = load_class_relation()
@@ -933,6 +936,7 @@ class PlannerPolicy:
         if obs.phase not in ("tactical", "cards"):
             return
         self._calibrate(obs)
+        self._track_incoming(obs)
         self._tracker.expire(obs.turn)
         for ally in obs.allies:
             slot, ident = ally.get("slot"), ally.get("id")
@@ -960,6 +964,14 @@ class PlannerPolicy:
         if slot not in self._party_seen_slots:
             self._party_seen_slots.add(slot)
             starting = next((m for m in self._party if m.get("group") == "starting" and m.get("slot") == slot), None)
+            from .identity import FGOPY_CLASS_NAMES
+            read_class = FGOPY_CLASS_NAMES.get((starting or {}).get("class_index"))
+            field_class = self._catalog_entry(ident).get("class_name")
+            if starting is not None and read_class and field_class and read_class != field_class:
+                # A saved read from another party: stale numbers would mislead. Drop it.
+                self._trace("party_mismatch", {"slot": slot, "party_class": read_class, "field_class": field_class})
+                self._party, self._party_by_slot = [], {}
+                return
             if starting is not None and id(starting) not in used:
                 self._party_by_slot[slot] = starting
                 return
@@ -996,6 +1008,57 @@ class PlannerPolicy:
             if 0.5 <= ratio <= 5:
                 self._calibration.append(ratio)
                 del self._calibration[:-5]
+
+    def _track_incoming(self, obs: Observation) -> None:
+        """HP each ally lost between its turn's last tactical frame and the next turn.
+
+        Seen live 2026-09-27 (Cernunnos, a Berserker): normal attacks took 9-14k
+        from every ally on turn 1 and killed the damage dealer, while party
+        invincibility was held for the enemy NP expected on turn 6. The request
+        showed current HP and enemy charge but not how hard the enemy hits.
+        """
+        if obs.phase != "tactical" or type(obs.wave) is not int or type(obs.turn) is not int:
+            return
+        key = (obs.wave, obs.turn)
+        now = {a.get("slot"): (a.get("id"), a.get("hp")) for a in obs.allies if a.get("slot") in (1, 2, 3)}
+        if key != self._hp_turn:
+            if (self._hp_turn is not None and self._hp_turn[0] == obs.wave
+                    and obs.turn == self._hp_turn[1] + 1 and self._hp_last):
+                rows = []
+                for slot, (ident, hp) in sorted(self._hp_last.items()):
+                    if type(ident) is not int or type(hp) is not int:
+                        continue
+                    new_id, new_hp = now.get(slot, (None, None))
+                    if new_id != ident or new_hp == 0:
+                        rows.append({"slot": slot, "servant_id": ident, "hp_before": hp, "died": True})
+                    elif type(new_hp) is int:
+                        rows.append({"slot": slot, "servant_id": ident, "hp_before": hp, "hp_after": new_hp,
+                                     "lost": hp - new_hp})
+                self._incoming = {"enemy_turn_after_turn": self._hp_turn[1], "allies": rows} if rows else None
+            elif self._hp_turn is not None and self._hp_turn[0] != obs.wave:
+                self._incoming = None
+            self._hp_turn, self._hp_last = key, {}
+        for slot, (ident, hp) in now.items():
+            if type(ident) is int and type(hp) is int:
+                self._hp_last[slot] = (ident, hp)
+
+    def _enemy_pressure_view(self, obs: Observation) -> dict | None:
+        """Observed damage taken last enemy turn, and class multipliers enemy -> ally."""
+        from .damage import affinity
+        view = {}
+        if self._incoming:
+            view["last_enemy_turn"] = self._incoming
+        classes = {a.get("slot"): self._catalog_entry(a.get("id")).get("class_name")
+                   for a in obs.allies if a.get("slot") in (1, 2, 3) and type(a.get("id")) is int}
+        multipliers = []
+        for enemy in obs.enemies:
+            if enemy.get("hp") and enemy.get("class_name") and self._class_relation:
+                multipliers.append({"enemy_slot": enemy.get("slot"), "enemy_class": enemy["class_name"],
+                                    "vs_ally_slot": {str(slot): affinity(self._class_relation, enemy["class_name"], klass)
+                                                     for slot, klass in sorted(classes.items()) if klass}})
+        if multipliers:
+            view["enemy_class_damage_multiplier"] = multipliers
+        return view or None
 
     def _calibration_factor(self) -> float:
         if not self._calibration:
@@ -1226,6 +1289,12 @@ class PlannerPolicy:
                 estimates = None
             if estimates:
                 request["damage_estimates"] = estimates
+            try:
+                pressure = self._enemy_pressure_view(obs)
+            except Exception:
+                pressure = None
+            if pressure:
+                request["enemy_pressure"] = pressure
         if self._notes:
             request["stage_notes"] = {
                 "source": "operator notes written after an earlier attempt at this battle failed",
@@ -1285,9 +1354,16 @@ class PlannerPolicy:
         if obs.phase == "cards":
             # Sealed face cards fill the chain only when too few usable cards exist,
             # which passes the turn while a seal wears off (see card_rules).
-            from .card_rules import selectable_slots
+            from .card_rules import chain_length, filler_slots, selectable_slots
             valid = selectable_slots(obs.cards, obs.signals, obs.turn)
-            for triple in permutations(valid, 3):
+            size = chain_length(obs.cards, obs.signals, obs.turn)
+            fillers = filler_slots(obs.cards, obs.signals, obs.turn)
+            real = min(size, len([slot for slot in valid if slot not in fillers]))
+            for triple in permutations(valid, size) if size else ():
+                # Fillers (sealed or stunned cards) only make up the count, after
+                # every real card that fits.
+                if any(slot in fillers for slot in triple[:real]):
+                    continue
                 identifier = "c" + "-".join(str(slot) for slot in triple)
                 allowed[identifier] = Action("cards", cards=triple)
         return allowed
@@ -1352,7 +1428,7 @@ class PlannerPolicy:
             action = self._scorer._cards(obs)
         except Exception:
             return None
-        if action.kind != "cards" or len(action.cards) != 3:
+        if action.kind != "cards" or not action.cards:
             return None
         return "c" + "-".join(str(slot) for slot in action.cards)
 
@@ -1556,7 +1632,7 @@ class PlannerPolicy:
 
     @staticmethod
     def _enemy_view(enemy: dict) -> dict:
-        return {key: enemy.get(key) for key in ("slot", "hp", "charge", "priority_label")}
+        return {key: enemy.get(key) for key in ("slot", "hp", "charge", "priority_label", "bars_remaining")}
 
     @staticmethod
     def _card_view(card: dict) -> dict:

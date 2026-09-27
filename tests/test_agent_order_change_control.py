@@ -199,6 +199,23 @@ class RefusedOrderChangeTests(unittest.TestCase):
         self.assertEqual([("master_menu", None, None), ("master_skill", 3, None),
                           ("dismiss_skill_error", None, None), ("master_menu", None, None)], driver.sent)
 
+    def test_a_refused_swap_closes_the_dialog_and_is_rejected_unspent(self):
+        """Live 2026-09-27: every sub member had come in as a reinforcement."""
+        class Driver(ScriptedDriver):
+            unavailable = False
+
+            def mark_order_change_unavailable(self):
+                Driver.unavailable = True
+        refusal = Observation("refused", "skill_error", "now")
+        driver = Driver([tactical("before"), tactical("palette", palette="ready"), refusal,
+                         tactical("back", palette="ready"), tactical("closed")])
+        control = BattleController(driver, sleeper=lambda _: None, max_polls=4)
+        result = control.execute(SWAP)
+        self.assertEqual("rejected", result.status, result.reason)
+        self.assertTrue(Driver.unavailable)
+        self.assertNotIn("order_change_confirm", [kind for kind, _, _ in driver.sent])
+        self.assertIn(("dismiss_skill_error", None, None), driver.sent)
+
     def test_the_refusal_dialog_is_recognized_as_a_skill_error(self):
         import os, tempfile, cv2
         root = Path(__file__).resolve().parents[1]
@@ -307,9 +324,32 @@ class ReinforcementTests(unittest.TestCase):
         states = [driver.observe() for _ in frames]
         self.assertEqual(3, len(states[1].signals["backline"]), "one frame is not yet a replacement")
         self.assertEqual(["Nitocris (Alter)", "Space Ereshkigal"], [m["name"] for m in states[2].signals["backline"]])
+        # Live 2026-09-27: the game moves the remaining members up a place.
+        self.assertEqual([1, 2], [m["slot"] for m in states[2].signals["backline"]])
+        self.assertEqual([1], [m["slot"] for m in states[4].signals["backline"]])
         self.assertEqual(["Space Ereshkigal"], [m["name"] for m in states[4].signals["backline"]])
         self.assertEqual([], states[6].signals["backline"])
         self.assertFalse(states[6].signals["order_change_available"])
+
+    def test_an_unidentified_servant_replaced_by_a_back_line_member_counts(self):
+        # Live 2026-09-27: support Castoria (never identified) died and Zhuge Liang
+        # came in; the back line kept him and Order Change met "no switchable".
+        frames = [self.frame("start", None, 1), self.frame("zhuge-in", 999, 2), self.frame("zhuge-held", 999, 2)]
+        driver, _ = DriverOrderChangeTrackingTests.driver(frames)
+        driver.servant_index[999] = {"name": "Zhuge Liang (Lord El-Melloi II)"}
+        driver.backline = [{"slot": 1, "name": "Zhuge Liang", "servant_id": None},
+                           {"slot": 2, "name": "YSpace Ereshkigal", "servant_id": None}]
+        driver.order_change_state = "ready"
+        states = [driver.observe() for _ in frames]
+        self.assertEqual(["YSpace Ereshkigal"], [m["name"] for m in states[2].signals["backline"]])
+
+    def test_an_unidentified_servant_later_identified_is_not_a_reinforcement(self):
+        frames = [self.frame("start", None, 1), self.frame("named", 316, 2), self.frame("named-2", 316, 2)]
+        driver, _ = DriverOrderChangeTrackingTests.driver(frames)
+        driver.backline = [{"slot": 1, "name": "Zhuge Liang", "servant_id": None}]
+        driver.order_change_state = "ready"
+        states = [driver.observe() for _ in frames]
+        self.assertEqual(1, len(states[2].signals["backline"]))
 
     def test_a_misread_within_the_same_turn_is_not_a_reinforcement(self):
         # Live 2026-09-25 (Cathedral Guards): Lady Avalon flickered to Oberon during a skill.

@@ -39,6 +39,57 @@ def _stunned(image, region) -> bool:
                                    cv2.TM_CCOEFF_NORMED).max()) >= _STUNNED_MATCH
 
 
+# NA "NP Sealed" label on an NP card (upstream HOUGUSEALED is CN text). Cut from a
+# live frame, 2026-09-27: sealed cards scored >= 0.76, 268 other card screens
+# (ready, stunned and absent NPs) <= 0.39. The seal was applied by the enemy's
+# attack, after the ally's Status tab had been read, so only the card showed it.
+_NP_SEALED_TEMPLATE = Path(__file__).parent / "assets" / "cards" / "np_sealed.png"
+_NP_SEALED_MATCH = 0.6
+_NP_SEALED_TEMPLATE_IMAGE = None
+
+
+def _np_sealed_label(image, index: int) -> bool:
+    import cv2
+    global _NP_SEALED_TEMPLATE_IMAGE
+    if _NP_SEALED_TEMPLATE_IMAGE is None:
+        _NP_SEALED_TEMPLATE_IMAGE = cv2.imread(str(_NP_SEALED_TEMPLATE), cv2.IMREAD_GRAYSCALE)
+    x = 431 + 220*index
+    region = cv2.cvtColor(image[172:245, x-130:x+140], cv2.COLOR_BGR2GRAY)
+    return float(cv2.matchTemplate(region, _NP_SEALED_TEMPLATE_IMAGE, cv2.TM_CCOEFF_NORMED).max()) >= _NP_SEALED_MATCH
+
+
+# A multi-bar enemy shows one diamond per HP bar under its name, left of the HP
+# number: lit (purple, blue) for bars still to come, dark once used. Measured on
+# the standard 3-enemy row, 2026-09-27: centres 14 px left of the HP box, 17.5 px
+# apart, y 62. Barghest showed 2 lit on bar 1, 1 lit on bar 2, 0 on its last bar;
+# the agent had broken bar 2 thinking the fight was won.
+_BAR_DIAMOND_X, _BAR_DIAMOND_PITCH, _BAR_DIAMOND_Y = -14, 17.5, 62
+
+
+def _bars_remaining(image, index: int) -> int:
+    """Lit bar diamonds under a standard-row enemy: HP bars left after this one."""
+    import cv2
+    import numpy
+    def colour(x):
+        patch = cv2.cvtColor(image[_BAR_DIAMOND_Y-1:_BAR_DIAMOND_Y+2, x-1:x+2], cv2.COLOR_BGR2HSV).reshape(-1, 3)
+        return [float(numpy.median(patch[:, c])) for c in range(3)], float(numpy.ptp(patch[:, 0]))
+
+    count = 0
+    for k in range(6):
+        x = int(round(100 + 250*index + _BAR_DIAMOND_X + _BAR_DIAMOND_PITCH*k))
+        (hue, sat, val), spread = colour(x)
+        # Saturated blue/green/purple: fire, gold and skin backgrounds sit at 10-35.
+        if not (70 <= hue <= 170 and sat >= 120 and val >= 120 and spread <= 20):
+            break
+        # A diamond has a dark gold rim just past its side corners. Seen live
+        # (Cernunnos): a pink sky next to three diamonds read as two more.
+        sides = [colour(x + dx)[0] for dx in (-8, 8)]
+        if any(abs(h - hue) < 20 and s >= 0.6*sat and v >= 0.75*val for h, s, v in sides):
+            break
+        count += 1
+    return count
+
+
 # NA "Turn(s)" label printed under a skill icon while it cools down. Averaged from
 # 60 live cooling icons (min-channel image, so white text stands out on any icon
 # art). Live 2026-09-24: ready icons scored <= 0.41, cooling ones >= 0.76.
@@ -455,6 +506,11 @@ class LegacyObserver:
             for i, enemy in enumerate(enemies):
                 if enemy.get("hp"):
                     enemy["class_name"] = self._enemy_class(detector, i, grid)
+                    if grid != 2:
+                        try:
+                            enemy["bars_remaining"] = _bars_remaining(image, i)
+                        except Exception as exc:
+                            errors.append(f"enemy {i+1} bars: {type(exc).__name__}: {exc}")
             enemies = observe_priority_labels(image, enemies, grid=grid)
             signals.update(target_signals(image, enemies, phase=phase, grid=grid))
             if phase == "cards":
@@ -499,7 +555,8 @@ class LegacyObserver:
                         np_sealed = (any(detector._compare(
                             template, (313+231*i, 194, 515+231*i, 270), .52)
                             for template in (detector.tmpl.HOUGUSEALED, detector.tmpl.CHARASEALED))
-                            or _stunned(image, (300+231*i, 170, 530+231*i, 270)))
+                            or _stunned(image, (300+231*i, 170, 530+231*i, 270))
+                            or _np_sealed_label(image, i))
                     except Exception as exc:
                         np_sealed = None
                         errors.append(f"NP {i+1} seal check: {type(exc).__name__}: {exc}")

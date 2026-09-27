@@ -58,11 +58,11 @@ def chain_damage(chain: list[tuple[int, str, bool]], attackers: dict[int, Attack
     total and the per-card values, plus the extra attack when all three cards
     belong to one servant (Brave Chain).
     """
-    if len(chain) != 3:
-        raise ValueError("a chain has three cards")
+    if not 1 <= len(chain) <= 3:
+        raise ValueError("a chain has one to three cards")
     first = chain[0][1]
     first_bonus = 0.5 if first == "buster" else 0.0
-    mighty_buster = all(card == "buster" for _, card, _ in chain)
+    mighty_buster = len(chain) == 3 and all(card == "buster" for _, card, _ in chain)
     per_card, total = [], 0.0
     for position, (slot, card, is_np) in enumerate(chain):
         attacker, buff = attackers.get(slot), buffs.get(slot, Buffs())
@@ -86,7 +86,7 @@ def chain_damage(chain: list[tuple[int, str, bool]], attackers: dict[int, Attack
         total += damage
     extra = None
     owners = {slot for slot, _, _ in chain}
-    if len(owners) == 1:
+    if len(owners) == 1 and len(chain) == 3:
         slot = chain[0][0]
         attacker, buff = attackers.get(slot), buffs.get(slot, Buffs())
         if attacker is not None:

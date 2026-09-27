@@ -283,6 +283,15 @@ class BattleDriver:
         turn = (observation.wave, observation.turn)
         current = {a.get("slot"): a.get("id") for a in observation.allies
                    if a.get("slot") in (1, 2, 3) and type(a.get("id")) is int}
+        # Seen live 2026-09-27: a support Castoria was never identified (id None);
+        # when Zhuge Liang replaced her, the slot looked like a first sighting and
+        # the back line kept him, so a later Order Change met "no switchable Sub
+        # Members". A living but unidentified servant holds the slot as "unknown".
+        for ally in observation.allies:
+            slot = ally.get("slot")
+            if (slot in (1, 2, 3) and slot not in current and slot not in self._field_ids
+                    and ally.get("id") is None and (ally.get("hp") or ally.get("alive"))):
+                self._field_ids[slot], self._field_seen[slot] = "unknown", turn
         for slot, ident in current.items():
             settled = self._field_ids.get(slot)
             if settled is None or settled == ident:
@@ -303,12 +312,33 @@ class BattleDriver:
                 continue  # same turn: a misread, not a death and a replacement
             self._field_pending.pop(slot, None)
             self._field_ids[slot], self._field_seen[slot] = ident, turn
+            matching = [i for i, m in enumerate(self.backline or []) if self._member_is(m, ident)]
+            if settled == "unknown" and not matching:
+                continue  # the unidentified servant may just have been identified
             if self.backline:
-                index = next((i for i, m in enumerate(self.backline) if m.get("servant_id") == ident), 0)
+                index = matching[0] if matching else 0
                 entered = self.backline.pop(index)
+                # Seen live 2026-09-27: after Zhuge Liang (sub 1) came in, the game
+                # showed Space Ereshkigal as sub 2; the others move up a place.
+                for place, member in enumerate(self.backline, start=1):
+                    shift = (member.get("slot") or place) - place
+                    member["slot"] = place
+                    if type(member.get("position")) is int:
+                        member["position"] -= shift
                 if self.trace:
                     self.trace.record("backline_reinforcement", {"field_slot": slot, "servant_id": ident,
                                                                  "member": entered, "left": len(self.backline)})
+
+    def _member_is(self, member: dict, ident: int) -> bool:
+        """A back-line member is this servant: same id, or one name contains the other
+        (the order-change screen shows "Zhuge Liang", the catalog "Zhuge Liang (Lord
+        El-Melloi II)"; OCR adds stray letters, as in "YSpace Ereshkigal")."""
+        if member.get("servant_id") == ident:
+            return True
+        letters = lambda text: "".join(ch for ch in str(text or "").casefold() if ch.isalpha())
+        shown = letters(member.get("name"))
+        known = letters((self.servant_index or {}).get(ident, {}).get("name"))
+        return len(shown) >= 5 and len(known) >= 5 and (shown in known or known in shown)
 
     def mark_order_change_unavailable(self) -> None:
         """The game refused Order Change (e.g. no switchable sub members) for this battle."""
@@ -374,8 +404,11 @@ class BattleDriver:
                 raise ValueError("Enemy target requires a fresh, verifiable standard three-enemy tactical observation.")
             self._tap(*((142, 40), (342, 40), (542, 40))[action.target - 1])
         elif kind == "cards":
-            if self.latest.phase != "cards" or len(action.cards) != 3 or len(set(action.cards)) != 3 or any(type(c) is not int or c not in range(1, 9) for c in action.cards):
-                raise ValueError("Choose exactly three distinct cards from the command screen.")
+            # Fewer than three only when stunned cards leave fewer selectable
+            # (the controller checks the count against the observation).
+            if (self.latest.phase != "cards" or not 1 <= len(action.cards) <= 3 or len(set(action.cards)) != len(action.cards)
+                    or any(type(c) is not int or c not in range(1, 9) for c in action.cards)):
+                raise ValueError("Choose one to three distinct cards from the command screen.")
             coordinates = ((185, 440), (399, 440), (649, 440), (875, 440), (1101, 440),
                            (431, 203), (651, 203), (845, 203))
             for slot in action.cards:
@@ -434,6 +467,12 @@ class BattleDriver:
                 self.trace.record("input", {"serial": self.device.serial, "swipe": [x1, y1, x2, y2],
                                             "ms": ep.SCROLL_MS, "observation_id": self.latest.id})
             self.device.swipe(x1, y1, x2, y2, ep.SCROLL_MS)
+        elif kind == "cards_back":
+            # The command-card Back button returns to the tactical screen without
+            # committing anything.
+            if self.latest.phase != "cards":
+                raise ValueError("Back requires the observed command-card screen.")
+            self._tap(1195, 683)
         elif kind == "dismiss_skill_error":
             if self.latest.phase != "skill_error":
                 raise ValueError("Dismissing requires the observed skill-error dialog.")

@@ -330,6 +330,32 @@ class EnemiesRemainingTests(FixtureObserverCase):
         self.assertEqual(3, self.observe("story/remaining-3.png").signals["enemies_remaining"])
 
 
+class BarsRemainingTests(FixtureObserverCase):
+    """Live 2026-09-27: Barghest's bar diamonds (lit = bars still to come) were on
+    screen, but the agent broke bar 2 believing it was the last."""
+
+    def bars(self, name):
+        return [e.get("bars_remaining") for e in self.observe(name).enemies if e.get("hp")]
+
+    def test_lit_diamonds_count_the_bars_left(self):
+        self.assertEqual([2], self.bars("story/barghest-bars-2.png"))
+        self.assertEqual([1], self.bars("story/barghest-bars-1.png"))
+        # Last bar, mid enemy turn (not a tactical frame): two dark diamonds.
+        import cv2
+        from fgo_agent.observer import _bars_remaining
+        self.assertEqual(0, _bars_remaining(cv2.imread(str(ROOT / "tests/fixtures/story/barghest-last-bar.png")), 1))
+        self.assertIn(2, self.bars("story/boss-large-icon-grid.png"))
+
+    def test_a_same_coloured_background_is_not_a_diamond(self):
+        # Live 2026-09-27 (Cernunnos): pink sky after three diamonds read as five.
+        self.assertEqual([3], self.bars("story/bars-pink-background.png"))
+        self.assertEqual([2], self.bars("story/np-sealed-two.png"))
+
+    def test_enemies_without_diamonds_have_none_left(self):
+        self.assertTrue(all(b == 0 for b in self.bars("story/remaining-3.png")))
+        self.assertTrue(all(b == 0 for b in self.bars("story/one-hp-guest.png")))
+
+
 class StunnedCardTests(FixtureObserverCase):
     """Live 2026-09-24: a stunned Castoria's cards and NP showed NA "Stunned"; upstream's
     CN template missed it, so they were picked and the taps did nothing."""
@@ -347,8 +373,33 @@ class StunnedCardTests(FixtureObserverCase):
         self.assertNotIn(6, selectable_slots(state.cards))
         self.assertTrue(set(selectable_slots(state.cards)).isdisjoint({2, 3, 4}))
 
-    def test_stunned_cards_never_fill_a_short_hand(self):
+    def test_two_stunned_servants_leave_a_two_card_chain(self):
+        """Live 2026-09-27 (Black Wolf): only Mash's Arts card and NP could be picked;
+        demanding three cards stopped the agent with no legal action."""
+        from fgo_agent.card_rules import chain_length, selectable_slots
+        from fgo_agent.controller import BattleController
+        from fgo_agent.models import Action
+        state = self.observe("story/two-servants-stunned.png")
+        # Live: after Mash's two cards the game waited for a third; stunned cards fill.
+        self.assertEqual([1, 6, 2, 3, 4, 5], selectable_slots(state.cards, state.signals, state.turn))
+        self.assertEqual(3, chain_length(state.cards, state.signals, state.turn))
+        self.assertIsNone(BattleController._validate_cards(None, Action("cards", cards=(6, 1, 2)), state))
+        self.assertIsNotNone(BattleController._validate_cards(None, Action("cards", cards=(6, 1)), state))
+
+    def test_np_sealed_label_makes_the_np_unusable(self):
+        """Live 2026-09-27 (Cernunnos): the enemy's attack sealed two NPs after their
+        Status tabs were read; the cards were tapped and the game waited."""
+        state = self.observe("story/np-sealed-two.png")
+        nps = {c["slot"]: c for c in state.cards if c["slot"] >= 6}
+        self.assertIsNot(True, nps[7]["ready"])
+        self.assertIsNot(True, nps[8]["ready"])
+        from fgo_agent.card_rules import selectable_slots
+        self.assertTrue({7, 8}.isdisjoint(selectable_slots(state.cards, state.signals, state.turn)))
+        ready = self.observe("story/two-servants-stunned.png")
+        self.assertTrue(next(c for c in ready.cards if c["slot"] == 6)["ready"])
+
+    def test_stunned_cards_fill_only_a_short_hand(self):
         from fgo_agent.card_rules import selectable_slots
         hand = [{"slot": s, "type": "arts", "sealed": True, "stunned": True} for s in (1, 2, 3)]
         hand += [{"slot": 4, "type": "quick", "sealed": False}, {"slot": 5, "type": "buster", "sealed": False}]
-        self.assertEqual([4, 5], selectable_slots(hand))
+        self.assertEqual([4, 5, 1, 2, 3], selectable_slots(hand))

@@ -225,6 +225,17 @@ class SealedHandTests(unittest.TestCase):
         allowed = policy._allowed_actions(Observation("c", "cards", "now", cards=self.hand({1, 2, 3, 4, 5})))
         self.assertTrue(allowed)
 
+    def test_stunned_cards_fill_the_chain_last(self):
+        """Live 2026-09-27: two servants stunned left one face card and one NP."""
+        cards = [{"slot": 1, "type": "arts", "sealed": False}]
+        cards += [{"slot": s, "type": "buster", "sealed": True, "stunned": True} for s in (2, 3, 4, 5)]
+        cards += [{"slot": 6, "type": "np", "sealed": False, "ready": True}]
+        policy = PlannerPolicy(DATA, Backend(PLAN))
+        allowed = policy._allowed_actions(Observation("c", "cards", "now", cards=cards))
+        chains = {a.cards for a in allowed.values() if a.kind == "cards"}
+        self.assertTrue(chains)
+        self.assertTrue(all(set(chain[:2]) == {1, 6} and chain[2] in (2, 3, 4, 5) for chain in chains))
+
     def test_sealed_cards_only_fill_a_short_hand(self):
         from fgo_agent.card_rules import selectable_slots
         self.assertEqual([1, 2, 3], selectable_slots(self.hand({4, 5})))
@@ -864,3 +875,26 @@ class SkillAfterOrderChangeTests(unittest.TestCase):
         after = tactical("t1", 1)
         after.allies[0]["id"] = 316
         self.assertNotEqual(PlannerPolicy._issue_key(before, "s1-3-t3"), PlannerPolicy._issue_key(after, "s1-3-t3"))
+
+
+class EnemyPressureTests(unittest.TestCase):
+    """Live 2026-09-27 (Cernunnos): turn-1 normal attacks killed the damage dealer
+    while party invincibility was held for a turn-6 enemy NP."""
+
+    def frame(self, name, turn, hps, ids=(10, 10, 10)):
+        allies = [{"slot": s + 1, "id": ids[s], "hp": hp} for s, hp in enumerate(hps)]
+        return Observation(name, "tactical", "now", wave=1, turn=turn, allies=allies,
+                           enemies=[{"slot": 2, "hp": 100000, "class_name": "berserker"}])
+
+    def test_losses_over_the_enemy_turn_and_class_multipliers(self):
+        policy = PlannerPolicy(DATA, Backend(PLAN))
+        policy._track_incoming(self.frame("t1-start", 1, (18000, 17000, 15500)))
+        policy._track_incoming(self.frame("t1-end", 1, (18500, 17000, 15500)))
+        policy._track_incoming(self.frame("t2", 2, (2800, 2000, 14000), ids=(10, 10, 37)))
+        rows = {r["slot"]: r for r in policy._incoming["allies"]}
+        self.assertEqual(15700, rows[1]["lost"])
+        self.assertTrue(rows[3]["died"])
+        policy._class_relation = {"berserker": {"assassin": 2000}}
+        policy._catalog_entry = lambda ident: {"class_name": "assassin"}
+        view = policy._enemy_pressure_view(self.frame("t2", 2, (2800, 2000, 14000)))
+        self.assertEqual(2.0, view["enemy_class_damage_multiplier"][0]["vs_ally_slot"]["1"])

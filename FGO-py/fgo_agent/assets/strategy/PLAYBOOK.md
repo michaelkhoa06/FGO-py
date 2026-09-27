@@ -45,9 +45,10 @@ pressure. They are lost by the party dying, or by a fight dragging on until the
 enemies fire their NPs again and again. When goals conflict, the higher priority
 wins:
 
-1. **No ally dies this enemy phase.** An ally below about 0.25 `hp_fraction`, or any
-   enemy whose `charge` is full (it NPs on its next action), calls for defence,
-   healing or a taunt BEFORE attacking. Unknown charge is unknown, not safe. A dead
+1. **No ally dies this enemy phase.** An ally below about 0.25 `hp_fraction`, an
+   ally that last enemy turn's losses (`enemy_pressure`) would kill, or any enemy
+   with full `charge` (it NPs next) calls for defence, healing or a taunt BEFORE
+   attacking. Unknown charge is unknown, not safe. A dead
    servant loses every skill and its NP for the rest of the fight.
 2. **Fire offensive NPs when ready.** An NP with `np_role` "offensive" fires under
    the best setup available this turn or next, otherwise as soon as possible:
@@ -55,25 +56,23 @@ wins:
 3. **Save support NPs and defence for the enemy's NP or a crisis.** A support NP
    (invincibility, stun, damage cut, buffs) or a defensive skill is not spent just
    because it is ready. Keep one defensive answer for every enemy whose charge can
-   fill before it dies. Weigh a skill's effects together: a single-ally
-   invincibility keeps one servant safe for a turn, which matters when that
-   servant is what the fight hinges on or the enemy NP hits one target, but it
-   does not save the party from an area NP. When the same skill also carries a
-   multi-turn damage buff, count that value too; do not hold the whole skill
-   only for its invincibility when party-wide protection can answer the NP.
+   fill before it dies. Weigh a skill's effects together: single-ally
+   invincibility saves one servant for a turn (vital when the fight hinges on it
+   or the NP is single-target), not the party from an area NP; if the skill also
+   carries a multi-turn damage buff, count that too rather than holding it only
+   for the invincibility when party-wide protection can answer the NP.
 4. **Otherwise, damage.** Focus the enemy closest to dying, fullest charge or marked
    `danger`; use `enemy_target` to point face cards at it. Charge the servant who
    can NP soonest and hurt the target most. A skill that raises ENEMY charge is a
-   cost, not a ban: it brings that enemy's NP sooner by the amount raised. Weigh
-   it against what the skill gives. It is cheap against an enemy that already
-   fills its gauge every turn or two (`enemy_charge_gain_per_turn`) or when a
-   defensive answer is ready for the earlier NP, and costly when it turns a safe
-   turn into an unanswered NP.
+   cost, not a ban: weigh the earlier enemy NP against what the skill gives. It
+   is cheap when that enemy fills its gauge every turn or two
+   (`enemy_charge_gain_per_turn`) or a defensive answer is ready, costly when it
+   turns a safe turn into an unanswered NP.
 
 Bosses outlast their HP bar. They revive, refill, cut damage, heal and gain Guts;
-a nearly dead enemy does not mean the fight is nearly over, and an HP jump means a
-fresh, full-strength threat. Against an enemy that NPs every turn, defence cannot
-cover every hit: shorten the fight with burst and keep healing. When a bar
+an enemy's `bars_remaining` counts the HP bars still to come (0 = last bar), so
+budget NPs and defence across all of them; an HP jump means a fresh threat.
+Against an enemy that NPs every turn, defence cannot cover every hit: shorten the fight with burst and keep healing. When a bar
 breaks, damage beyond it is lost: do not spend the big NP on a nearly empty bar
 that smaller hits can finish.
 
@@ -93,6 +92,8 @@ What the state tells you:
   Compare them before giving away card slots: when a buffed servant's own cards
   out-damage another servant's NP, that servant gets the turn. They rank options;
   they are not exact (no Craft Essence, crits or unseen enemy traits).
+- `enemy_pressure`: HP each ally lost last enemy turn (or died) and each enemy's
+  class damage multiplier per ally; normal attacks alone can kill before any NP.
 - `stage_notes`, when present, was written after an earlier attempt at THIS battle
   failed. Where it applies, it outranks this guide.
 

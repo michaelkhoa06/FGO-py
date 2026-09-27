@@ -66,3 +66,15 @@ class PartyInPlannerTests(unittest.TestCase):
         policy._track_field(self.frame(10, 1))
         policy._track_field(self.frame(20, 3))
         self.assertEqual(12345, policy._party_member(1)["atk"])
+
+
+class StalePartyTests(unittest.TestCase):
+    def test_a_party_read_from_another_team_is_ignored(self):
+        party = [{"position": 1, "group": "starting", "slot": 1, "atk": 15000, "np_level": 5, "class_index": 5}]
+        policy = PlannerPolicy({}, None, strategy_catalog=PartyInPlannerTests.CATALOG, party=party)
+        frame = Observation("t", "tactical", "now", wave=1, turn=1,
+                            allies=[{"slot": 1, "id": 10, "hp": 100, "np": 0, "skills": []}],  # a saber, not a caster
+                            enemies=[{"slot": 1, "hp": 10000}], signals={})
+        policy._track_field(frame)
+        self.assertIsNone(policy._party_member(1))
+        self.assertEqual(10000, policy._attackers(frame)[1].atk)

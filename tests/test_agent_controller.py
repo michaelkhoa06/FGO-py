@@ -384,6 +384,17 @@ class BattleControllerTests(unittest.TestCase):
         self.assertEqual("confirmed", result.status)
         self.assertEqual("done", result.after_observation_id)
 
+    def test_a_card_screen_that_stays_after_the_picks_goes_back(self):
+        """Live 2026-09-27: sealed NPs were tapped, the game waited for more cards."""
+        available = [{"slot": s, "type": "Arts", "sealed": False} for s in (1, 2, 3)]
+        stuck = [observation(f"stuck-{i}", "cards", cards=available) for i in range(40)]
+        controller = self.controller([observation("before", "cards", cards=available), *stuck,
+                                      observation("back", "tactical")], max_polls=200, timeout=200)
+        result = controller.execute(Action("cards", cards=(1, 2, 3)))
+        self.assertEqual("rejected", result.status)
+        self.assertIn("did not attack", result.reason)
+        self.assertEqual(["cards", "cards_back"], [a.kind for a in controller.driver.sent])
+
     def test_run_stops_after_a_rejected_action(self):
         controller = self.controller([observation("unknown", "unknown")])
         results = controller.run([Action("attack"), Action("attack")])

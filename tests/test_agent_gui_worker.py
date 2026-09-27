@@ -81,11 +81,16 @@ if __name__=='__main__':
 class ObjectiveCommandTests(unittest.TestCase):
     """The GUI must pass its chosen objective to the AI policy, and only to it."""
 
-    def test_codex_battle_carries_the_selected_objective(self):
+    def test_codex_battle_carries_the_story_objective(self):
         command = gui_support.agent_command("battle", "127.0.0.1:16384", policy="codex",
-                                            objective="farm_fast")
+                                            objective="survive_and_win")
         self.assertIn("--objective", command)
-        self.assertEqual("farm_fast", command[command.index("--objective") + 1])
+        self.assertEqual("survive_and_win", command[command.index("--objective") + 1])
+
+    def test_farming_is_no_longer_offered(self):
+        # User, 2026-09-26: story only; farming wants its own cheaper automation.
+        with self.assertRaises(ValueError):
+            gui_support.agent_command("battle", "127.0.0.1:16384", policy="codex", objective="farm_fast")
 
     def test_baseline_battle_has_no_objective_flag(self):
         command = gui_support.agent_command("battle", "127.0.0.1:16384", policy="legacy")
@@ -95,6 +100,6 @@ class ObjectiveCommandTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             gui_support.agent_command("battle", "127.0.0.1:16384", policy="codex", objective="whatever")
 
-    def test_default_objective_is_farming(self):
+    def test_default_objective_is_story(self):
         command = gui_support.agent_command("battle", "127.0.0.1:16384", policy="codex")
-        self.assertEqual("farm_fast", command[command.index("--objective") + 1])
+        self.assertEqual("survive_and_win", command[command.index("--objective") + 1])

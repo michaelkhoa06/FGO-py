@@ -345,6 +345,15 @@ class BattleController:
         back, _, failure = self._await(lambda o: o.phase == TACTICAL, deadline)
         return back if failure is None else None
 
+    def back_from_cards(self, deadline=None) -> Observation | None:
+        """Tap Back on the command cards; return the tactical frame, or None."""
+        try:
+            self._send(Action("cards_back"))
+        except Exception:
+            return None
+        back, _, failure = self._await(lambda o: o.phase == TACTICAL, deadline)
+        return back if failure is None else None
+
     _MAX_STATUS_SCROLLS = 3
 
     def _scroll_status(self, dialog: Observation, phase: str, deadline) -> int:
@@ -415,7 +424,19 @@ class BattleController:
                 return self._result(action, "rejected", before, palette,
                                     reason=f"order change is {state}; nothing committed")
             self._send(Action("master_skill", skill=3))
-            screen, last, failure = self._await(lambda o: o.phase == "order_change", deadline)
+            screen, last, failure = self._await(lambda o: o.phase in ("order_change", "skill_error"), deadline)
+            if screen is not None and screen.phase == "skill_error":
+                # Seen live 2026-09-27: "You don't have any switchable Sub Members"
+                # after every sub member had come in as a reinforcement. Nothing is
+                # spent: close the dialog and the palette, stop offering the swap.
+                mark = getattr(self.driver, "mark_order_change_unavailable", None)
+                if callable(mark):
+                    mark()
+                restored = self.dismiss_skill_error(deadline)
+                if restored is not None and self._palette_state(restored) is not None:
+                    self._close_palette(deadline)
+                return self._result(action, "rejected", before, restored or screen,
+                                    reason="the game refused Order Change (no switchable sub members); nothing committed")
             if screen is None or failure is not None:
                 return self._result(action, "uncertain", before, last,
                                     reason="order change screen did not appear; nothing committed")
@@ -665,13 +686,28 @@ class BattleController:
     # A card turn can outlast the normal wait. Seen live (Morgan): three NPs, the
     # boss's NP, a death and a reinforcement took over 120 s, and the run stopped.
     _CARD_WAIT_SCALE = 3.0
+    # Seen live 2026-09-27: two tapped NPs were sealed, the game waited for more
+    # cards, and the card screen stayed for minutes until the run stopped. The
+    # attack replaces the card screen within seconds once three cards are taken.
+    _CARD_STUCK_SECONDS = 25.0
 
     def _finish_cards(self, action: Action, before: Observation, deadline: float | None) -> ActionResult:
         last = None
+        cards_since = None
         for observation in self._poll(deadline, scale=self._CARD_WAIT_SCALE):
             if isinstance(observation, _ObservationFailure):
                 return self._observation_error(action, before, last, observation.error)
             last = observation
+            if observation.phase == CARDS:
+                cards_since = self._monotonic() if cards_since is None else cards_since
+                if self._monotonic() - cards_since >= self._CARD_STUCK_SECONDS:
+                    back = self.back_from_cards(deadline)
+                    return self._result(action, "rejected", before, back or observation,
+                                        reason=f"the game did not attack: the card screen stayed "
+                                               f"{self._CARD_STUCK_SECONDS:.0f} s after the picks (a picked card "
+                                               f"could not be used); Back tapped, picks cleared")
+            else:
+                cards_since = None
             if observation.signals.get("turn_advanced") is True:
                 return self._result(action, "confirmed", before, observation,
                                     evidence=["turn_advanced signal observed"])
@@ -808,10 +844,12 @@ class BattleController:
     def _validate_cards(self, action: Action, observation: Observation) -> str | None:
         if observation.phase != CARDS:
             return "cards require cards phase"
-        if len(action.cards) != 3 or len(set(action.cards)) != 3 or any(slot not in range(1, 9) for slot in action.cards):
-            return "cards must contain exactly three unique slots from 1 through 8"
+        from .card_rules import chain_length, selectable_slots
+        needed = chain_length(observation.cards, observation.signals, observation.turn)
+        if (len(action.cards) != max(needed, 1) or len(set(action.cards)) != len(action.cards)
+                or any(slot not in range(1, 9) for slot in action.cards)):
+            return f"cards must contain exactly {needed} unique slots from 1 through 8"
         indexed = {card.get("slot"): card for card in observation.cards}
-        from .card_rules import selectable_slots
         selectable = set(selectable_slots(observation.cards, observation.signals, observation.turn))
         for slot in action.cards:
             card = indexed.get(slot)

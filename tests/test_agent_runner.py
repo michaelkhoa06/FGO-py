@@ -256,3 +256,46 @@ class SkillErrorDismissTests(unittest.TestCase):
         result = BattleRunner(controller, Policy(), poll_interval=0).run()
         self.assertEqual('completed', result['status'])
         self.assertEqual(1, len(closed))
+
+
+class CardsBackTests(unittest.TestCase):
+    """Live 2026-09-27: a run resumed on the card screen had no trusted turn and
+    stopped as unknown; Back returns to the tactical screen instead."""
+
+    def test_a_card_screen_without_a_turn_goes_back_first(self):
+        backs = []
+
+        class Returning(Controller):
+            def back_from_cards(self, deadline):
+                backs.append(deadline)
+                return observation('back')
+        controller = Returning([observation('cards', 'cards', turn=None), observation('end', 'result'),
+                                observation('end-2', 'result')])
+        result = BattleRunner(controller, Policy(), poll_interval=0).run()
+        self.assertEqual('completed', result['status'])
+        self.assertEqual(1, len(backs))
+
+    def test_a_card_screen_with_a_known_turn_is_played(self):
+        backs = []
+
+        class Returning(Controller):
+            def back_from_cards(self, deadline):
+                backs.append(deadline)
+        controller = Returning([observation('cards', 'cards'), observation('end', 'result'),
+                                observation('end-2', 'result')],
+                               [ActionResult(Action("attack"), "confirmed", "cards", "end")])
+        BattleRunner(controller, Policy(), poll_interval=0).run()
+        self.assertEqual([], backs)
+
+
+class RejectedCardsTests(unittest.TestCase):
+    def test_cards_the_game_did_not_take_are_decided_again(self):
+        class CardPolicy(Policy):
+            def next_action(self, observation): return Action("cards", cards=(1, 2, 3))
+        controller = Controller([observation('cards', 'cards'), observation('cards-2', 'cards'),
+                                 observation('end', 'result'), observation('end-2', 'result')],
+                                [ActionResult(Action("cards", cards=(1, 2, 3)), "rejected", "cards", "cards",
+                                              reason="the game did not attack"),
+                                 ActionResult(Action("cards", cards=(1, 2, 3)), "confirmed", "cards-2", "end")])
+        result = BattleRunner(controller, CardPolicy(), poll_interval=0).run()
+        self.assertEqual('completed', result['status'])

@@ -16,9 +16,11 @@ WORKER_PATH = ROOT / "fgoAgentGuiWorker.py"
 DEFAULT_SERIAL = "127.0.0.1:16384"
 DEFAULT_MODEL = "gpt-6-sol"
 DEFAULT_REASONING = "low"
-DEFAULT_OBJECTIVE = "farm_fast"
-OBJECTIVE_LABELS = (("Farming — fewest turns", "farm_fast"),
-                    ("Story / unknown — survive and win", "survive_and_win"))
+# Story only (user, 2026-09-26): farming is better served by cheaper automation.
+DEFAULT_OBJECTIVE = "survive_and_win"
+OBJECTIVE_LABELS = (("Story — survive and win", "survive_and_win"),)
+# The settings every live story run used: whole-battle plans, long boss fights.
+BATTLE_OPTIONS = ("--plan-ahead", "--max-actions", "300", "--max-turns", "100", "--battle-timeout", "3600")
 AUTH_ENVIRONMENT_KEYS = frozenset({"OPENAI_API_KEY", "CODEX_API_KEY", "CODEX_ACCESS_TOKEN",
                                    "OPENAI_BASE_URL", "OPENAI_ORG_ID", "OPENAI_ORGANIZATION",
                                    "OPENAI_PROJECT_ID"})
@@ -32,7 +34,7 @@ def python_executable() -> str:
 
 def agent_command(command: str, serial: str | None = None, *, policy: str = "codex",
                   account_mode: str = "development", codex_home: Path | None = None,
-                  objective: str = DEFAULT_OBJECTIVE) -> list[str]:
+                  objective: str = DEFAULT_OBJECTIVE, start_from_party: bool = False) -> list[str]:
     """Build an explicit fgoAgent invocation without executing it."""
     command_line = [python_executable(), str(ROOT / "fgoAgent.py"), command]
     if command == "devices":
@@ -48,7 +50,8 @@ def agent_command(command: str, serial: str | None = None, *, policy: str = "cod
             if objective not in {value for _, value in OBJECTIVE_LABELS}:
                 raise ValueError("Objective must be a known battle objective.")
             command_line.extend(["--model", DEFAULT_MODEL, "--reasoning", DEFAULT_REASONING,
-                                 "--objective", objective])
+                                 "--objective", objective, *BATTLE_OPTIONS])
+        command_line.append("--start-from-party" if start_from_party else "--no-start-from-party")
         # Only an isolated dedicated account receives an explicit Codex home.
         if account_mode == "dedicated" and codex_home is not None:
             command_line.extend(["--codex-home", str(codex_home)])
@@ -75,6 +78,44 @@ def process_environment(base: Mapping[str, str] | None, account: Mapping[str, ob
     environment = {str(key): str(value) for key, value in environment.items() if value is not None}
     environment["PYTHONUTF8"] = "1"
     return environment
+
+
+def battle_progress(trace_path: Path, offset: int = 0, state: dict | None = None) -> tuple[int, dict]:
+    """Read new trace lines from ``offset``; return the new offset and a summary.
+
+    The summary holds what the GUI shows while a battle runs: wave, turn, the
+    enemies' HP and the latest decision. Unreadable lines are skipped.
+    """
+    import json
+    state = dict(state or {})
+    try:
+        with open(trace_path, "rb") as handle:
+            handle.seek(offset)
+            data = handle.read()
+    except OSError:
+        return offset, state
+    complete = data.rfind(b"\n") + 1
+    for line in data[:complete].splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        kind, payload = event.get("event"), event.get("payload") or {}
+        if kind == "observation" and payload.get("phase") == "tactical":
+            if payload.get("turn") is not None:
+                state["wave"], state["turn"] = payload.get("wave"), payload.get("turn")
+                state["stage_total"] = (payload.get("signals") or {}).get("stage_total")
+            hp = [e.get("hp") for e in payload.get("enemies") or [] if isinstance(e.get("hp"), int)]
+            if hp:
+                state["enemy_hp"] = hp
+        elif kind == "decision":
+            action = payload.get("action") or {}
+            state["last_action"] = str(action.get("reason") or action.get("kind") or "")[:140]
+        elif kind == "battle_plan":
+            state["plan"] = str(payload.get("reason") or "")[:220]
+        elif kind == "battle_result":
+            state["outcome"] = payload.get("outcome") or payload.get("status")
+    return offset + complete, state
 
 
 def latest_screenshot(runs_directory: Path) -> Path | None:

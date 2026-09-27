@@ -60,11 +60,55 @@ PARTY_FILE = ROOT / "agent-runs" / "party-latest.json"
 PARTY_MAX_AGE_SECONDS = 4 * 3600
 
 
+def read_party(images, detector_module) -> dict | None:
+    """Merge Confirm Party reads from several frames; None if the screen is absent.
+
+    Seen live: the skill/NP line alternates with append-skill levels every few
+    seconds, so each field takes its most common valid reading across frames.
+    """
+    from collections import Counter
+    from fgo_agent.party import read_confirm_party
+    reads = []
+    for image in images:
+        detector = object.__new__(detector_module.XDetectNA)
+        detector.im = image
+        read = read_confirm_party(image, detector_module.XDetectNA.ocr.ocrText, detector)
+        if read is not None:
+            reads.append(read)
+    if not reads:
+        return None
+    party = {"members": [], "frames": len(reads)}
+    for index in range(len(reads[0]["members"])):
+        member = {}
+        for key in reads[0]["members"][index]:
+            values = [json.dumps(r["members"][index].get(key)) for r in reads
+                      if r["members"][index].get(key) is not None]
+            member[key] = json.loads(Counter(values).most_common(1)[0][0]) if values else None
+        if member.get("atk") is not None:  # an empty or locked column reads as noise
+            party["members"].append(member)
+    return party
+
+
+def save_party(party: dict) -> None:
+    from datetime import datetime, timezone
+    party["captured_at"] = datetime.now(timezone.utc).isoformat()
+    PARTY_FILE.parent.mkdir(parents=True, exist_ok=True)
+    PARTY_FILE.write_text(json.dumps(party, indent=2), encoding="utf-8")
+
+
+def capture_frames(device, count=6, pause=0.7):
+    import time
+    frames = []
+    for index in range(count):
+        frames.append(device.screenshot())
+        if index + 1 < count:
+            time.sleep(pause)
+    return frames
+
+
 def read_party_command(args) -> int:
     """Read-only: save the Confirm Party numbers for the next battle to use."""
     import cv2
-    from datetime import datetime, timezone
-    import time
     if args.image:
         images = [cv2.imread(str(args.image))]
     else:
@@ -72,42 +116,48 @@ def read_party_command(args) -> int:
             raise ValueError("Select --serial explicitly; the agent never chooses the first device.")
         device = AdbEmulator(args.serial, find_adb(args.adb), allow_input=False)
         device.connect()
-        # Seen live: the skill/NP line alternates with append-skill levels every
-        # few seconds, so one capture can miss it. Six captures span a cycle and
-        # each field takes its most common valid reading.
-        images = []
-        for _ in range(6):
-            images.append(device.screenshot())
-            time.sleep(0.7)
+        images = capture_frames(device)
     os.chdir(Path(__file__).resolve().parent)
     import fgoDetect
-    from fgo_agent.party import read_confirm_party
-    from collections import Counter
-    reads = []
-    for image in images:
-        detector = object.__new__(fgoDetect.XDetectNA)
-        detector.im = image
-        read = read_confirm_party(image, fgoDetect.XDetectNA.ocr.ocrText, detector)
-        if read is not None:
-            reads.append(read)
-    party = None
-    if reads:
-        party = {"members": [], "frames": len(reads)}
-        for index in range(len(reads[0]["members"])):
-            member = {}
-            for key in reads[0]["members"][index]:
-                values = [json.dumps(r["members"][index].get(key)) for r in reads
-                          if r["members"][index].get(key) is not None]
-                member[key] = json.loads(Counter(values).most_common(1)[0][0]) if values else None
-            party["members"].append(member)
+    party = read_party(images, fgoDetect)
     if party is None:
         print(json.dumps({"status": "not_confirm_party", "reason": "Confirm Party screen not recognized"}))
         return 1
-    party["captured_at"] = datetime.now(timezone.utc).isoformat()
-    PARTY_FILE.parent.mkdir(parents=True, exist_ok=True)
-    PARTY_FILE.write_text(json.dumps(party, indent=2), encoding="utf-8")
+    save_party(party)
     print(json.dumps(party, indent=2))
     return 0
+
+
+TO_BATTLE_BUTTON = (1165, 690)
+
+
+def start_from_party(device, observer, trace, timeout=120.0) -> str:
+    """On Confirm Party: read the party, tap To Battle, wait for the battle screen.
+
+    The user starts the agent from Confirm Party on purpose (GUI "Start"), so the
+    To Battle tap is their start command; it is logged like any input. Anywhere
+    else nothing is tapped and the battle already on screen is played.
+    """
+    import time
+    frames = capture_frames(device)
+    party = read_party(frames, observer.module)
+    if party is None:
+        trace.record("start_from_party", {"status": "not_on_confirm_party"})
+        return "not_on_confirm_party"
+    save_party(party)
+    trace.record("start_from_party", {"status": "party_read", "frames": party.get("frames")})
+    trace.record("input", {"x": TO_BATTLE_BUTTON[0], "y": TO_BATTLE_BUTTON[1],
+                           "reason": "To Battle on Confirm Party (user started the agent from that screen)"})
+    device.tap(*TO_BATTLE_BUTTON)
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        time.sleep(2)
+        observation = observer.observe(device.screenshot())
+        if observation.phase == "tactical" and observation.turn is not None:
+            trace.record("start_from_party", {"status": "battle_screen_reached", "observation_id": observation.id})
+            return "battle_screen_reached"
+    trace.record("start_from_party", {"status": "battle_screen_not_reached"})
+    return "battle_screen_not_reached"
 
 
 def load_recent_party() -> list | None:
@@ -168,6 +218,9 @@ def parser():
             p.add_argument('--policy', choices=['legacy', 'codex'], default='legacy')
             p.add_argument('--notes', type=Path,
                            help='Stage notes written after a failed attempt; sent to the AI on every decision')
+            p.add_argument('--start-from-party', action=argparse.BooleanOptionalAction, default=True,
+                           help='If Confirm Party is showing: read the party, tap To Battle, then play the battle. '
+                                'Anywhere else nothing is tapped.')
             p.add_argument('--party', action=argparse.BooleanOptionalAction, default=True,
                            help='Use the last Confirm Party read (fgoAgent party) if under 4 hours old')
             p.add_argument('--plan-ahead', action='store_true',
@@ -258,6 +311,8 @@ def main(argv=None):
                              "objective": getattr(args, 'objective', None),
                              "account": getattr(args, 'account', None),
                              "order_change": getattr(args, 'order_change', None),
+                             "plan_ahead": getattr(args, 'plan_ahead', None),
+                             "start_from_party": getattr(args, 'start_from_party', None),
                              "notes": str(args.notes) if getattr(args, 'notes', None) else None,
                              "model": getattr(args, 'model', None), "reasoning": getattr(args, 'reasoning', None)})
     print(f"Session: {session}", flush=True)
@@ -306,6 +361,12 @@ def main(argv=None):
             # A frame now takes ~0.9 s (raw capture + memoized reads), so a 1 s pause
             # between frames was most of every wait. The 120 s timeout stays the bound.
             controller = BattleController(driver, trace=trace, timeout=120, max_polls=200, poll_interval=0.4)
+            if getattr(args, 'start_from_party', False):
+                started = start_from_party(device, observer, trace)
+                print(f"Start from party: {started}", flush=True)
+                if started == "battle_screen_not_reached":
+                    raise RuntimeError("To Battle was tapped but the battle screen did not appear within 2 minutes "
+                                       "(close any popup in the game, then press Start again).")
             policy = LegacyPolicy(observer.module.servantData)
             if args.policy == 'codex':
                 from fgo_agent.codex_backend import CodexBackend

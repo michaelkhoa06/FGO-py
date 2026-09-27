@@ -82,6 +82,21 @@ class BattleRunner:
                 if error:
                     return self._finish("error", error, actions)
                 continue
+            back = getattr(self.controller, "back_from_cards", None)
+            if (observation.phase == "cards" and not self._known_progress(observation) and callable(back)
+                    and unknown_count < self.unknown_polls):
+                # Seen live 2026-09-27: a run resumed on the card screen. Its turn
+                # counter is untrusted there without an earlier tactical frame, so
+                # nothing could be decided; Back shows the tactical screen instead.
+                unknown_count += 1
+                returned = back(None)
+                if self.trace:
+                    self.trace.record("cards_back", {"observation_id": observation.id,
+                                                     "returned": returned is not None})
+                observation, error = self._next_observation()
+                if error:
+                    return self._finish("error", error, actions)
+                continue
             report = None
             if self.scout is not None and (observation.phase in ("enemy_profile", "ally_status") or (
                     observation.phase == "tactical" and self._known_progress(observation))):
@@ -153,8 +168,11 @@ class BattleRunner:
             actions.append(asdict(result) if isinstance(result, ActionResult) else self._result_dict(result))
             status = getattr(result, "status", None)
             if status != "confirmed":
-                resumable = (status in ("uncertain", "rejected")
-                             and action.kind in ("skill", "enemy_target", "attack")
+                # A rejected Order Change was cancelled unspent (the back line did
+                # not match); the policy decides again from a fresh frame.
+                resumable = ((status in ("uncertain", "rejected")
+                              and action.kind in ("skill", "enemy_target", "attack")
+                              or status == "rejected" and action.kind in ("cards", "order_change"))
                              and continuations < self.unconfirmed_continuations)
                 if not resumable:
                     return self._finish("uncertain", f"action was {status or 'invalid'}: "

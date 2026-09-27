@@ -867,6 +867,160 @@ enemy's unique attacks drain; Castoria's NP protects it). The agent cannot read
 that gauge; its rule text was passed as `--notes` (use an absolute path; the
 agent changes directory at start).
 
+### GitHub repository (2026-09-26)
+
+Public fork: https://github.com/michaelkhoa06/FGO-py (fork of hgjazhgj/FGO-py,
+AGPL-3.0), default branch `codex-agent` = upstream v21.1.1 + one commit with the
+agent. Since 2026-09-26 (user request) this working copy, FGO-codex/FGO-py, is
+itself the git checkout (origin = fork, upstream = hgjazhgj); the separate clone
+was deleted. AGENTS.md stays at the FGO-codex root, untracked (local paths).
+Commits use the GitHub no-reply address; the dedicated account's email was
+removed from the docs before publishing. agent-runs/ is git-ignored (it holds
+screenshots and full model requests).
+
+### GUI revamp (2026-09-26, user request)
+
+Start from Confirm Party is now the agent's default (`--start-from-party`,
+`--no-start-from-party` to disable; it taps only when Confirm Party is recognized):
+the user's first GUI run from Confirm Party never attempted the party read and the
+cause could not be reproduced, so it no longer depends on the GUI's flag. The session
+record now logs `plan_ahead` and `start_from_party`. Empty or locked party columns
+(no ATK read) are dropped.
+
+`fgoAgentGui.py` rewritten: dark card-style theme; settings remembered with
+QSettings ("FGO-Codex"/"FGO Agent": serial, account mode, player, start-from-party);
+story objective only (farming removed; `gui_support.DEFAULT_OBJECTIVE` =
+survive_and_win and every GUI battle adds `BATTLE_OPTIONS`: --plan-ahead, 300
+actions, 100 turns, 3600 s - GUI runs previously lacked plan-ahead); the raw log,
+"Open run folder" and "Observe" removed; "Start one battle" renamed "Start"; a
+status card shows wave/turn, enemy HP, elapsed time, the latest decision and the
+current plan (read from the run's trace.jsonl by `gui_support.battle_progress`);
+plain-language results (Victory!/Defeat/stopped reason). "Open latest screenshot"
+kept. Login output (redacted) still appears only during sign-in.
+`battle --start-from-party` (GUI default on): if Confirm Party is showing, read
+the party (6 frames), tap To Battle (logged), wait up to 2 min for the battle
+screen; otherwise play the battle on screen. A saved party whose starting
+classes do not match the field is discarded (`party_mismatch`). 365 tests pass.
+
+### Barghest (2026-09-27): DEFEAT on turn 7, 18.5 min
+Run 20260927T023258Z-6f093079, first live start from Confirm Party (6-frame read,
+To Battle tapped and logged). User party "thrown at a wall": Draco (skills 3/3/3),
+Arjuna Alter (Berserker vs a Saber boss), support Mash, Lancelot and Gawain in the back.
+Demonic Dog Barghest: one Saber with 3 bars (252,972 / 313,781 / 372,354), charge
+absorb. Arjuna NP'd T1, Draco broke bar 1 on T3, Arjuna and Mash died by T5, the
+T6 NP wiped Draco and Lancelot, and Gawain alone broke bar 2 on T7 (brave Buster
+chain, the right call), then bar 3 appeared and killed him. The damage calibration
+(1.68) worked. Loss driver: team strength. Perception gap: bar diamonds under the
+enemy name were on screen from T1 and never read, so Codex treated bar 2 as the
+last.
+Fix: `_bars_remaining` counts lit diamonds on the standard row (enemy
+`bars_remaining`, sent in the request); tests `BarsRemainingTests`. Guide:
+the boss sentence names it (reworded, no new rule). Provisional until a second
+multi-bar boss shows the count helps.
+
+### Black Wolf (2026-09-27): VICTORY on turn 9 after a stun fix mid-battle
+Run 20260927T064048Z-209dfc9e: one Caster, 2 bars, Guts + "recover HP and survive".
+`bars_remaining` read 1 then 0 correctly, and Codex planned with it ("Draco's NP
+should then hit the remaining bar"). On turn 3 Draco and Arjuna were Stunned: only
+Mash's Arts card and NP were selectable, card enumeration demanded three, and the
+run stopped with "no legal observable actions" on the card screen.
+Verified live, in order: (1) picking only Mash's two cards does NOT start the
+attack; the game waits for a third. (2) Tapping a stunned card as the third DOES
+(run 20260927T071259Z-09459f20: chain [1, 6, 2], turn advanced). This corrects the
+09-24 note ("stunned taps did nothing": that run had picked a stunned NP).
+Fix: `card_rules.selectable_slots` adds stunned (or incapacitated-ally) face cards
+as a last resort when fewer than 3 others remain, as FGA does
+(FaceCardPriority: "Stunned cards at the end"); `filler_slots` + the planner keep
+fillers after every real card. `chain_length` (short chains) remains only for a
+hand with nothing left to fill. Tests `test_two_stunned_servants_leave_a_two_card_chain`
+(fixture two-servants-stunned.png), `test_stunned_cards_fill_the_chain_last`.
+Result: the resumed run won on turn 9 (turns 3-9 in 11.5 min, no operator battle
+input). Draco's NP took the last bar to 9,124 on turn 6, Mash died on turn 7, and
+the Wolf's Guts left it at 1 HP; Codex finished it on turn 9 with brave chains,
+keeping Draco's and Arjuna's NPs in hand.
+Resume from the card screen: a fresh run has no trusted turn there (card-screen
+turn OCR is untrusted), so the runner taps Back (1195, 683; commits nothing,
+clears picks) via `controller.back_from_cards` and plays from the tactical
+screen (`CardsBackTests`; worked live twice).
+
+### Cernunnos (2026-09-27): DEFEAT on turn 6; NP Sealed on the card, fixed mid-battle
+Run 20260927T072826Z-3085e072 (started from Confirm Party; Zhuge Liang, Lady
+Avalon, Draco; order change on turn 1). One Berserker with 4 bars (`bars_remaining`
+3 on bar 1, 2 on bar 2). The enemy's turn-2 attack sealed Lady Avalon's and Draco's
+NPs; Avalon's Status tab had been read before that, so `np_sealed_allies` did not
+know. The cards read ready, [7, 8, 1] was picked, the two sealed NP taps did
+nothing, and the game waited for two more cards until the 2-minute timeout.
+Fix: `assets/cards/np_sealed.png` (NA "NP Sealed" label, grayscale, cut live):
+sealed cards score >= 0.76, 268 other card screens <= 0.39; threshold 0.6, OR-ed
+into the NP seal check with upstream's CN templates and the stunned template.
+Test `test_np_sealed_label_makes_the_np_unusable` (fixture np-sealed-two.png).
+Resumed run 20260927T074901Z-1c3df513 tapped Back, then played [5, 1, 3] (no
+sealed NP picked). Zhuge Liang and Lady Avalon fell on turn 3; the back line
+(Castoria, Space Ereshkigal) came in and fell by turn 6. Draco alone fired on
+turn 6 and died with the boss at 54,996 on bar 2 of 4 (2 bars still to come).
+Loss driver: a 4-bar boss with NP seals and curses against this party.
+Also added (generic): if the card screen stays 25 s after the picks, the game did
+not take them; the controller taps Back and returns "rejected", and the runner
+lets the policy decide the cards again (within the 3 unconfirmed continuations).
+Tests `test_a_card_screen_that_stays_after_the_picks_goes_back`, `RejectedCardsTests`.
+Not yet exercised live.
+
+### Cernunnos rematch (2026-09-27): Tezcatlipoca team
+Run 20260927T081001Z-37ad5bd7 (Castoria x2 + Tezcatlipoca; subs Zhuge Liang, Lady
+Avalon, Space Ereshkigal). User asked Codex to use Tezcatlipoca's buff window
+(NPs, else his face cards); no notes were passed (user declined them). His S3
+Special Attack vs [Divine]/[Super Giant] is in the catalog as `target_traits`; the
+estimator reports it as `needs_enemy_trait` and does not assume enemy traits.
+Turn 1: Tezcatlipoca NP'd (176k -> 117k), then the Berserker boss's normal attacks
+(x2 vs every class) took 9-14k from each ally and killed him while Black Sun
+(party Invincible x2) was held for the projected turn-6 enemy NP.
+Bugs fixed: (1) after a reinforcement the back line kept old slot numbers; the
+game moves the rest up (Space Ereshkigal showed as sub 2), so an Order Change to
+"b2 = Lady Avalon" was cancelled unspent. `_track_reinforcements` renumbers
+slot/position. (2) A rejected (cancelled, unspent) Order Change stopped the run;
+the runner now lets the policy decide again (like rejected cards).
+New request data (generic): `enemy_pressure` = HP each ally lost over the last
+enemy turn (or died) and each enemy's class damage multiplier per ally
+(`_track_incoming`, `_enemy_pressure_view`, `EnemyPressureTests`). Guide: story
+priority 1 now counts "an ally that last enemy turn's losses would kill"; glossary
+line added; priorities 3-4 condensed to stay under the 24,000 cap. Provisional.
+Resumed run 20260927T082002Z-686682d2 (started before `enemy_pressure` existed):
+DEFEAT on turn 7. Without Tezcatlipoca there was no damage: Castoria NPs and
+Avalon's invincibility kept the party alive to turn 5, bar 2 broke on turn 6, and
+Space Ereshkigal (last reinforcement) fell on turn 7 with 2 bars still to come.
+Bar reader fix: a pink sky right of Cernunnos's three diamonds (purple, blue,
+green) read as 5; a lit diamond must now differ from the pixels 8 px either side
+(its rim), and green hues count. Today's runs now read one stable count per turn
+(single animation frames can read 0). Test `test_a_same_coloured_background_is_not_a_diamond`.
+User decision (2026-09-27): enemy traits are ignored entirely. No trait notes and no
+trait assumptions in the estimator (it already counts trait-conditional buffs only
+as `needs_enemy_trait`, outside the numbers). The user builds teams; this rematch
+compares Tezcatlipoca with Draco as the main damage dealer, so far worse. To be
+continued on 2026-09-28 with a Cernunnos rematch.
+
+### Cernunnos rematch 2 (2026-09-27 evening): first run with `enemy_pressure`
+Run 20260927T190349Z-983c0fc9. Tezcatlipoca NP'd on turn 1 and survived (1,882
+HP). On turn 2 Codex cited the new data ("took 13,653 damage last enemy turn") and
+used Black Sun; Tezcatlipoca NP'd again on turn 3 and bar 1 broke. The whole front
+line fell in the turn-3 enemy phase; all three subs came in.
+Bugs fixed: (1) the support Castoria in slot 1 was never identified (id None), so
+Zhuge Liang replacing her was not counted and the back line kept him; turn 5's
+Order Change met "You don't have any switchable Sub Members" and the run stopped
+("order change screen did not appear"). The driver now holds a living
+unidentified servant's slot as "unknown"; a new id there counts as a reinforcement
+only if it matches a back-line member (id, or one name contains the other, letters
+only: "Zhuge Liang" / "Zhuge Liang (Lord El-Melloi II)"). (2) The swap itself now
+handles the refusal dialog like reconnaissance does: close it, mark Order Change
+unavailable, return "rejected" (the runner continues).
+Tests: `test_an_unidentified_servant_replaced_by_a_back_line_member_counts`,
+`test_an_unidentified_servant_later_identified_is_not_a_reinforcement`,
+`test_a_refused_swap_closes_the_dialog_and_is_rejected_unspent`. Resumed as
+20260927T192414Z-5d02d0d5 (dialog closed, reconnaissance: unavailable).
+Result: DEFEAT on turn 8 (31 min over both runs). Space Ereshkigal NP'd on turns 6
+and 8 as the last one standing; the boss ended on bar 2 of 4 at 29,740. Compared
+with the Draco team (same fight): both stalled on bar 2 of 4; this team lasted two
+turns longer. Bars 1-2 alone were about 176k + 244k; bars 3-4 were never seen.
+
 ## Next session intent (user, end of 2026-09-24)
 
 Continue the Avalon le Fae story. The next few fights are heavily scripted and

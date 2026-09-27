@@ -26,8 +26,7 @@ def usable(card: dict) -> bool:
 
 
 def sealed_face(card: dict) -> bool:
-    # A stunned servant's cards are different: the taps did nothing live, so they
-    # can never fill a chain.
+    # A stunned servant's cards are only a last resort (see selectable_slots).
     return (card.get("sealed") is True and card.get("stunned") is not True
             and str(card.get("type", "")).lower() in FACE_TYPES and card.get("slot") in range(1, 6))
 
@@ -99,4 +98,37 @@ def selectable_slots(cards: list[dict], signals: dict | None = None, turn: int |
     slots = sorted({c.get("slot") for c in cards if usable(c) and c.get("slot") in range(1, 9)} - blocked)
     if len(slots) < 3:
         slots += sorted({c.get("slot") for c in cards if sealed_face(c)} - set(slots))
+    if len(slots) < 3:
+        # Seen live 2026-09-27 (Black Wolf): with Draco and Arjuna stunned, Mash's
+        # Arts card and NP were picked and the game waited for a third card. FGA
+        # taps stunned cards last to fill the chain; they are fillers only.
+        slots += sorted({c.get("slot") for c in cards if c.get("slot") in range(1, 6)
+                         and str(c.get("type", "")).lower() in FACE_TYPES
+                         and (c.get("stunned") is True or c.get("servant") in down)} - set(slots))
     return slots
+
+
+def filler_slots(cards: list[dict], signals: dict | None = None, turn: int | None = None) -> set[int]:
+    """Selectable slots that only fill a chain (sealed or stunned); tap them last."""
+    return {slot for slot in selectable_slots(cards, signals, turn)
+            if not usable(next((c for c in cards if c.get("slot") == slot), {}))
+            or next((c for c in cards if c.get("slot") == slot), {}).get("stunned") is True}
+
+
+def chain_length(cards: list[dict], signals: dict | None = None, turn: int | None = None) -> int:
+    """Cards to pick this turn: three, or every selectable card when fewer remain.
+
+    Stunned cards now fill a short hand, so this is three whenever all five face
+    cards were read; it stays short only for a hand with nothing left to fill.
+    """
+    selectable = selectable_slots(cards, signals, turn)
+    if len(selectable) >= 3:
+        return 3
+    # Short only when all five face cards were read and the rest are observed
+    # stunned or belong to an incapacitated ally; a partial read stays at three.
+    down = incapacitated_allies(signals, turn)
+    faces = {c.get("slot"): c for c in cards if c.get("slot") in range(1, 6) and c.get("type") is not None}
+    if len(faces) == 5 and all(slot in selectable or card.get("stunned") is True or card.get("servant") in down
+                               for slot, card in faces.items()):
+        return len(selectable)
+    return 3
