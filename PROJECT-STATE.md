@@ -1020,6 +1020,26 @@ Result: DEFEAT on turn 8 (31 min over both runs). Space Ereshkigal NP'd on turns
 and 8 as the last one standing; the boss ended on bar 2 of 4 at 29,740. Compared
 with the Draco team (same fight): both stalled on bar 2 of 4; this team lasted two
 turns longer. Bars 1-2 alone were about 176k + 244k; bars 3-4 were never seen.
+Leyline continuation 20260927T193655Z-42d1dbc2 (turns 9-13, 19.5 min): DEFEAT on
+turn 13 with the boss on bar 3 of 4 at 91,047 and full charge. Codex kept
+Tezcatlipoca's NP off a 14,867 bar for the fresh one (turn 10: 342k bar), and
+fired it again on turn 12 as his buffs ran out, but held Lady Avalon's party
+Invincible for turn 13 while all three allies were at 1-3k HP after losing 5-10k
+each; that enemy phase killed Avalon and Tezcatlipoca.
+Fixes: (1) `_lethal_issue` joins the plan revision: when last enemy turn's loss
+(`enemy_pressure`) is at least an ally's current HP and a ready defensive skill or
+full-gauge defensive NP goes unused this turn, the plan is sent back once
+(`LethalDamageTests`). Provisional. (2) Back-line name match allows up to 3 stray
+OCR letters ("Zhuge LiangA" vs "Zhuge Liang (Lord El-Melloi II)"), which had
+popped the wrong member when two subs came in together.
+Second Leyline continuation 20260927T200559Z-351470c4 (turns 14-17, 15.5 min):
+DEFEAT on turn 17. Turn 14 at full enemy charge: Castoria's NP (protection) then
+Tezcatlipoca's NP broke bar 3 (77,927). The last bar was 537,164. Turn 16's enemy
+phase (charge jumped 0 -> 2) killed Zhuge Liang (11.8k), Lady Avalon and
+Tezcatlipoca (8.3k) at once; losses the turn before were 2.5-4.7k, so
+`_lethal_issue` correctly did not fire. Space Ereshkigal NP'd alone on turn 17
+(484k left). Over 4 attempts this team reached the last bar; the fight is a
+team-strength wall.
 
 ## Next session intent (user, end of 2026-09-24)
 

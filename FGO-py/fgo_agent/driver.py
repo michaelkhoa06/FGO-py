@@ -335,10 +335,16 @@ class BattleDriver:
         El-Melloi II)"; OCR adds stray letters, as in "YSpace Ereshkigal")."""
         if member.get("servant_id") == ident:
             return True
+        from difflib import SequenceMatcher
         letters = lambda text: "".join(ch for ch in str(text or "").casefold() if ch.isalpha())
         shown = letters(member.get("name"))
         known = letters((self.servant_index or {}).get(ident, {}).get("name"))
-        return len(shown) >= 5 and len(known) >= 5 and (shown in known or known in shown)
+        if len(shown) < 5 or len(known) < 5:
+            return False
+        # The shorter name, up to 3 stray OCR letters ("Zhuge LiangA"), is in the longer.
+        short, long = sorted((shown, known), key=len)
+        run = SequenceMatcher(None, short, long).find_longest_match(0, len(short), 0, len(long)).size
+        return run >= max(5, len(short) - 3)
 
     def mark_order_change_unavailable(self) -> None:
         """The game refused Order Change (e.g. no switchable sub members) for this battle."""

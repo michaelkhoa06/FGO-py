@@ -898,3 +898,28 @@ class EnemyPressureTests(unittest.TestCase):
         policy._catalog_entry = lambda ident: {"class_name": "assassin"}
         view = policy._enemy_pressure_view(self.frame("t2", 2, (2800, 2000, 14000)))
         self.assertEqual(2.0, view["enemy_class_damage_multiplier"][0]["vs_ally_slot"]["1"])
+
+
+class LethalDamageTests(unittest.TestCase):
+    """Live 2026-09-27 (Cernunnos): allies at 1-3k HP after losing 5-10k each; the
+    plan fired an NP and held party invincibility for the next turn."""
+
+    def setup(self, hp=1200, lost=6000):
+        policy = PlannerPolicy(DATA, Backend(PLAN), strategy_catalog=DefensiveReserveTests.CATALOG,
+                               plan_ahead=True)
+        policy._incoming = {"enemy_turn_after_turn": 1, "allies": [
+            {"slot": 1, "servant_id": 10, "hp_before": hp + lost, "hp_after": hp, "lost": lost}]}
+        low = dict(ally(ready=(1, 3)), hp=hp)
+        obs = Observation("t2", "tactical", "now", allies=[low], wave=1, turn=2,
+                          enemies=[{"slot": 1, "hp": 200000, "charge": [1, 5]}], signals={"stage_total": 1})
+        return policy, obs
+
+    def test_an_unused_ready_defence_is_flagged(self):
+        policy, obs = self.setup()
+        issue = policy._lethal_issue({2: {"wave": 1, "skills": ["s1-3-t1"], "np": [1]}}, obs)
+        self.assertIn("slot 1 (1200 HP, lost 6000)", issue)
+        self.assertIsNone(policy._lethal_issue({2: {"wave": 1, "skills": ["s1-1-t1"], "np": []}}, obs))
+
+    def test_survivable_losses_are_not_flagged(self):
+        policy, obs = self.setup(hp=9000, lost=6000)
+        self.assertIsNone(policy._lethal_issue({2: {"wave": 1, "skills": [], "np": [1]}}, obs))

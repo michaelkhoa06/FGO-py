@@ -342,6 +342,8 @@ class ReinforcementTests(unittest.TestCase):
         driver.order_change_state = "ready"
         states = [driver.observe() for _ in frames]
         self.assertEqual(["YSpace Ereshkigal"], [m["name"] for m in states[2].signals["backline"]])
+        self.assertTrue(driver._member_is({"name": "Zhuge LiangA"}, 999))
+        self.assertFalse(driver._member_is({"name": "Space Ereshkigal"}, 999))
 
     def test_an_unidentified_servant_later_identified_is_not_a_reinforcement(self):
         frames = [self.frame("start", None, 1), self.frame("named", 316, 2), self.frame("named-2", 316, 2)]

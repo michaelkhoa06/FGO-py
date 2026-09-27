@@ -637,7 +637,12 @@ class PlannerPolicy:
             # and its buff ends in Eternal Slumber at the end of the turn, yet half of
             # it was cast without the target firing its NP that turn.
             now_or_never = self._now_or_never_issue(turns, obs)
-            if (not idle and not defense and not durable and not held and not now_or_never) or attempt == 2:
+            # Seen live 2026-09-27 (Cernunnos): all three allies at 1-3k HP after
+            # losing 5-10k each the enemy turn before; party invincibility was held
+            # for the next turn's NP and the normal attacks killed two of them.
+            lethal = self._lethal_issue(turns, obs) if self.objective == "survive_and_win" else None
+            if (not idle and not defense and not durable and not held and not now_or_never
+                    and not lethal) or attempt == 2:
                 break
             issues = []
             if idle:
@@ -653,6 +658,8 @@ class PlannerPolicy:
                 issues.append(held)
             if now_or_never:
                 issues.append(now_or_never)
+            if lethal:
+                issues.append(lethal)
             # A revision answers explicit feedback, so it does not need medium effort.
             planning = dict(request["planning"], feedback=" ".join(issues), reasoning="low")
             request = {key: value for key, value in request.items() if key not in ("request_id", "planning")}
@@ -661,7 +668,7 @@ class PlannerPolicy:
                                                               ensure_ascii=True).encode()).hexdigest()
             self._trace("battle_plan_revision", {"observation_id": obs.id, "idle_waves": idle,
                                                  "defense": defense, "durable": durable, "held": held,
-                                                 "now_or_never": now_or_never})
+                                                 "now_or_never": now_or_never, "lethal": lethal})
         self._battle_plan = {"turns": turns, "reason": response["reason"], "request_id": request["request_id"],
                              "made_at": {"wave": obs.wave, "turn": obs.turn},
                              "roster": {a["slot"]: a["id"] for a in obs.allies
@@ -815,6 +822,32 @@ class PlannerPolicy:
                 f"every defensive option (skills {sorted(skills)}, NPs of slots {sorted(nps)}) before then and "
                 f"schedules none on turn {turn}. Keep one defensive answer for turn {turn} or use it then, unless "
                 "that enemy will certainly be dead first; if so, say why in reason.")
+
+    def _lethal_issue(self, turns: dict[int, dict], obs: Observation) -> str | None:
+        """Allies that last enemy turn's losses would kill now, with a ready defence unused."""
+        if not self._incoming or type(obs.turn) is not int:
+            return None
+        living = {a["slot"]: a for a in self._living_allies(obs)}
+        doomed = []
+        for row in self._incoming.get("allies", []):
+            ally = living.get(row.get("slot"))
+            if (ally is not None and ally.get("id") == row.get("servant_id") and type(row.get("lost")) is int
+                    and type(ally.get("hp")) is int and row["lost"] >= ally["hp"] > 0):
+                doomed.append(f"slot {row['slot']} ({ally['hp']} HP, lost {row['lost']})")
+        if not doomed:
+            return None
+        skills, nps = self._defensive_options(obs)
+        nps = {slot for slot in nps if isinstance(living.get(slot, {}).get("np"), (int, float))
+               and living[slot]["np"] >= 100}
+        if not skills and not nps:
+            return None
+        prefix = lambda step: step.rsplit("-t", 1)[0]
+        entry = turns.get(obs.turn, {"skills": [], "np": []})
+        if ({prefix(step) for step in entry["skills"]} & skills) or (set(entry["np"]) & nps):
+            return None
+        return (f"Last enemy turn's losses would kill {', '.join(doomed)} this turn, yet your plan for turn {obs.turn} "
+                f"uses none of the ready defensive options (skills {sorted(skills)}, NPs of slots {sorted(nps)}). "
+                "Use one now, or say in reason why those allies survive or why losing them is worth it.")
 
     @classmethod
     def _battle_plan_schema(cls) -> dict:
