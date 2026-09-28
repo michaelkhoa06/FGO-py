@@ -1135,6 +1135,15 @@ diamonds were not all HP bars (the fight ended on bar 2). `bars_remaining` is a
 strong hint, not a guarantee; keep watching whether other bosses match it. User
 review: Codex "did the best it could do, just about matching how I would have played".
 
+### Kingprotea Xochitonal (2026-09-28): stopped by the user on turn 12
+Run 20260928T064038Z-7d3baefc. Scripted fight (user screenshot of the mechanics:
+party reshuffle at the start and after bar breaks unless a front-line Defender-trait
+servant is present, skill seal + DEF down, 3,000 HP drain, heals, full HP restore
+after 11 turns). The user said not to work around the mechanics (Codex stays
+general-purpose); Leonidas was placed at the front for the reshuffle. The user
+ended the run on turn 12 to save usage: the team could not beat it. No input was
+sent after the stop.
+
 ## Next session intent (user, end of 2026-09-24)
 
 Continue the Avalon le Fae story. The next few fights are heavily scripted and
