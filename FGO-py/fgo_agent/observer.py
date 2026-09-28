@@ -78,14 +78,18 @@ def _bars_remaining(image, index: int) -> int:
     import numpy
     def colour(x):
         patch = cv2.cvtColor(image[_BAR_DIAMOND_Y-1:_BAR_DIAMOND_Y+2, x-1:x+2], cv2.COLOR_BGR2HSV).reshape(-1, 3)
-        return [float(numpy.median(patch[:, c])) for c in range(3)], float(numpy.ptp(patch[:, 0]))
+        hues = patch[:, 0].astype(int)
+        # Hue wraps at 180: a red diamond mixes 0-5 and 175-179.
+        spread = min(numpy.ptp(hues), numpy.ptp((hues + 90) % 180))
+        return [float(numpy.median(patch[:, c])) for c in range(3)], float(spread)
 
     count = 0
     for k in range(6):
         x = int(round(100 + 250*index + _BAR_DIAMOND_X + _BAR_DIAMOND_PITCH*k))
         (hue, sat, val), spread = colour(x)
-        # Saturated blue/green/purple: fire, gold and skin backgrounds sit at 10-35.
-        if not (70 <= hue <= 170 and sat >= 120 and val >= 120 and spread <= 20):
+        # Any saturated colour: U-Olga Marie's five bars ran purple, blue, green,
+        # yellow, orange (2026-09-27). Backgrounds are rejected by the rim check.
+        if not (sat >= 120 and val >= 120 and spread <= 20):
             break
         # A diamond has a dark gold rim just past its side corners. Seen live
         # (Cernunnos): a pink sky next to three diamonds read as two more.

@@ -1109,6 +1109,19 @@ NPs fired a turn late. Fix: when not every planned NP is legal, the executor
 fires every planned NP that still is (`PartialPlannedNpTests`). Turn 19 fired all
 three NPs (205k -> 61k) and Arjuna Alter's buffed cards finished it on turn 20.
 
+### U-Olga Marie (2026-09-27): DEFEAT on turn 6, played blind
+Run 20260927T222718Z-91413522 (Koyanskaya of Light, Mash, Arjuna Alter; subs incl.
+Nitocris, Space Ereshkigal). The boss's "Unknown" class shows a red custom diamond;
+`guard_enemy_presence` needs the standard gold/silver outline, so its HP (OCR
+290,716 correct) was withheld on every frame and Codex planned with no enemy data
+("enemy HP is unreadable"). Turn 6: Nitocris's NP was really "NP Sealed" (correctly
+skipped). Fixes: (1) a readable charge meter with a real maximum (0/4) is presence
+evidence for a non-standard class icon; a removed enemy's phantom HP reads 0/0
+(`UnknownClassBossTests`, fixture unknown-class-boss.png). (2) Bar diamonds may be
+any colour (U-Olga: purple, blue, green, yellow, orange-red; read 3 before), with
+red hue wrap handled; the rim check still rejects backgrounds. All fixtures and
+today's runs re-read correctly.
+
 ## Next session intent (user, end of 2026-09-24)
 
 Continue the Avalon le Fae story. The next few fights are heavily scripted and

@@ -37,9 +37,17 @@ def guard_enemy_presence(image, enemies, *, grid):
             border = (hsv[:,:,1] < 210) & (hsv[:,:,2] > 115)
             coverage = [float(border[outline&q].mean()) for q in quadrants]
             present = min(coverage) >= .25 and float(border[center].mean()) < .85
+            method = 'standard NA class-diamond bright outline and dark center'
+            # Seen live 2026-09-27: U-Olga Marie's "Unknown" class shows a red custom
+            # diamond, the outline test failed, and the boss's HP (290,716) was
+            # withheld all fight. A readable charge meter (a real maximum, 0/4) is
+            # HUD evidence too; a removed enemy's phantom HP reads charge 0/0.
+            charge = item.get('charge')
+            if (not present and isinstance(charge, (list, tuple)) and len(charge) == 2
+                    and type(charge[1]) is int and charge[1] > 0 and type(item.get('hp')) is int):
+                present, method = True, 'enemy charge meter (non-standard class icon)'
             item.update(present=True if present else None,
-                        presence_evidence={'method':'standard NA class-diamond bright outline and dark center',
-                                           'quadrant_coverage':coverage}, hp_ocr=item.get('hp'))
+                        presence_evidence={'method': method, 'quadrant_coverage':coverage}, hp_ocr=item.get('hp'))
             if not present:
                 item['hp'] = None
         guarded.append(item)

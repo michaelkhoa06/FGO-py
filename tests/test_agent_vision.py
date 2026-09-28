@@ -330,6 +330,19 @@ class EnemiesRemainingTests(FixtureObserverCase):
         self.assertEqual(3, self.observe("story/remaining-3.png").signals["enemies_remaining"])
 
 
+class UnknownClassBossTests(FixtureObserverCase):
+    """Live 2026-09-27 (U-Olga Marie): a red "Unknown" class diamond failed the
+    presence outline and the boss's HP was withheld for the whole fight."""
+
+    def test_a_readable_charge_meter_keeps_the_enemy(self):
+        state = self.observe("story/unknown-class-boss.png")
+        boss = next(e for e in state.enemies if e["slot"] == 2)
+        self.assertEqual(290716, boss["hp"])
+        self.assertIsNone(next(e for e in state.enemies if e["slot"] == 1)["hp"])
+        # Five lit diamonds: purple, blue, green, yellow, orange-red (hue wraps).
+        self.assertEqual(5, boss["bars_remaining"])
+
+
 class BarsRemainingTests(FixtureObserverCase):
     """Live 2026-09-27: Barghest's bar diamonds (lit = bars still to come) were on
     screen, but the agent broke bar 2 believing it was the last."""
