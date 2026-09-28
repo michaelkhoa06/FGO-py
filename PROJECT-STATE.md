@@ -1121,6 +1121,19 @@ evidence for a non-standard class icon; a removed enemy's phantom HP reads 0/0
 any colour (U-Olga: purple, blue, green, yellow, orange-red; read 3 before), with
 red hue wrap handled; the rim check still rejects backgrounds. All fixtures and
 today's runs re-read correctly.
+Rematch 20260928T051119Z-d830ae07 (17.5 min): DEFEAT on turn 6. The boss was read
+from turn 1 (290,716, charge 0/4, 5 bars to come). Arjuna Alter NP'd on turns 1-2
+(290k -> 125k), then the whole front line fell in the turn-2 enemy phase; all
+three subs came in (back line tracked correctly). Nitocris's NP broke bar 1 on
+turn 4; bar 2 was 459,939 with 4 still to come. Codex noted the boss ignores
+Invincible. Out of reach for this party (user: Mash is a forced front-line member).
+Leyline continuation 20260928T053251Z-8e01981b: VICTORY on turn 12 (16.5 min). Turns
+7 and 9 fired all three NPs at full enemy charge; Codex cited `enemy_pressure`
+("lost more HP last enemy turn than she has now"); Space Ereshkigal's buffed NP
+ended it at 25,100 with `bars_remaining` still reading 4. So U-Olga's five
+diamonds were not all HP bars (the fight ended on bar 2). `bars_remaining` is a
+strong hint, not a guarantee; keep watching whether other bosses match it. User
+review: Codex "did the best it could do, just about matching how I would have played".
 
 ## Next session intent (user, end of 2026-09-24)
 

@@ -70,7 +70,7 @@ wins:
    turns a safe turn into an unanswered NP.
 
 Bosses outlast their HP bar. They revive, refill, cut damage, heal and gain Guts;
-an enemy's `bars_remaining` counts the HP bars still to come (0 = last bar), so
+an enemy's `bars_remaining` (lit diamonds) usually counts HP bars still to come, so
 budget NPs and defence across all of them; an HP jump means a fresh threat.
 Against an enemy that NPs every turn, defence cannot cover every hit: shorten the fight with burst and keep healing. When a bar
 breaks, damage beyond it is lost: do not spend the big NP on a nearly empty bar
